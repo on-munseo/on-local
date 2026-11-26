@@ -10,6 +10,33 @@
 
 </div>
 
+<!-- ai-install -->
+## AI 에게 — 이 꾸러미를 설치하려면
+
+이 꾸러미는 AI 도구에 붙이는 MCP 서버(stdio)입니다. **「설치」는 AI 도구에 MCP 서버로 등록하는 것**이고, `npm install -g` 만으로는 AI 도구에 붙지 않습니다. 열쇠·로그인은 없습니다. Node.js 20 이상에서, 쓰는 도구의 한 줄만 실행하세요.
+
+- **Claude Code**
+  ```bash
+  claude mcp add -s user on-local -- npx -y on-munseo-local@latest
+  ```
+- **Codex**
+  ```bash
+  codex mcp add on-local -- npx -y on-munseo-local@latest
+  ```
+- **Cursor** — `~/.cursor/mcp.json` 의 `"mcpServers"` 에 한 줄을 더합니다(이미 있는 서버는 그대로). 사람은 [Cursor 에 붙이기](https://cursor.com/install-mcp?name=on-local&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIm9uLW11bnNlby1sb2NhbEBsYXRlc3QiXX0%3D).
+  ```json
+  "on-local": { "command": "npx", "args": ["-y", "on-munseo-local@latest"] }
+  ```
+- **VS Code**
+  ```bash
+  code --add-mcp '{"name":"on-local","command":"npx","args":["-y","on-munseo-local@latest"]}'
+  ```
+- **Claude 데스크톱** — 설정 파일(맥 `~/Library/Application Support/Claude/claude_desktop_config.json`, 윈도우 `%APPDATA%\Claude\claude_desktop_config.json`)의 `"mcpServers"` 에 위 Cursor 와 같은 한 줄을 더하고 앱을 다시 켭니다.
+
+등록한 그 대화에는 도구가 아직 붙지 않습니다. 끝나면 사용자에게 「도구를 한 번 다시 켜거나 새 대화를 열면 On 문서 내 PC 판 도구가 보입니다」라고 알려 주세요. `claude mcp list`(Codex 는 `codex mcp list`) 목록에 `on-local` 줄이 있으면 등록된 것입니다. 보고서 쓰기·법령 원문(원격 묶음)을 함께 붙이는 법은 아래 [연결하기](#연결하기).
+
+<!-- ai-install -->
+
 한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 읽어 글과 표를 마크다운으로 꺼내고, 개인정보를 찾아 가리고, 공문서 표기를 점검합니다. AI(언어 모델) 없이 규칙으로 합니다.
 
 - **문서가 밖으로 나가지 않습니다.** 이 프로그램은 AI 프로그램과 표준 입출력(stdio)으로만 주고받고, 네트워크를 쓰지 않습니다. 업데이트 확인도, 사용 기록 보내기도 없습니다. 하루·분당 사용 한도도 없습니다. [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다)으로 직접 확인할 수 있습니다.
