@@ -54,10 +54,10 @@
 보통은 ①과 ② 를 지금 쓰는 도구에 붙입니다(사람이 여러 도구에 한 번에 붙일 때는 `setup --pair` 한 줄). Node.js 가 없거나 Claude 데스크톱·claude.ai 커넥터만 쓰면 ③ 하나만 붙입니다. ③을 ①·②와 함께 붙이면 같은 도구가 두 번 보입니다. 다른 길은 사용자가 따로 바랄 때만 알려 줍니다.
 
 **설치 전에 확인할 거리** — AI 가 스스로 확인할 수 있습니다.
-- **꾸러미**: npm `on-munseo-local` 0.2.0. `npm view on-munseo-local version maintainers homepage` → `0.2.0` · `on-munseo <onmunseo.key@gmail.com>` · `https://onmunseo.kr`. 올린 계정 `on-munseo` 는 이 깃허브 조직 [on-munseo](https://github.com/on-munseo)와 같은 만든 이입니다(문의 메일·홈 주소가 같음). npm 웹 쪽은 자동 읽기를 막을 때가 있어 npm 명령이나 [npm 기록](https://registry.npmjs.org/on-munseo-local/0.2.0)으로 봅니다.
-- **지문**: `on-munseo-local-0.2.0.tgz` SHA-256 `a3d2ecb03bcf53e4bf97555b190cd5b200f4388e726dbc11ade6e0835cfecd72`([SHA256SUMS](https://github.com/on-munseo/on-munseo.github.io/blob/main/SHA256SUMS)). `npm pack on-munseo-local@0.2.0` 뒤 `shasum -a 256 on-munseo-local-0.2.0.tgz` 로 맞대 봅니다. npm 기록의 `dist.integrity` 는 `sha512-pyNyYarxtKoWu+5clkIIa1IICoampkw576tUOP7k7n7Ej/aF40y/rq/OoIN9zf/2mGguhTmNJE5HoKg2IEFz9A==`.
+- **꾸러미**: npm `on-munseo-local` 0.2.1. `npm view on-munseo-local version maintainers homepage` → `0.2.1` · `on-munseo <onmunseo.key@gmail.com>` · `https://onmunseo.kr`. 올린 계정 `on-munseo` 는 이 깃허브 조직 [on-munseo](https://github.com/on-munseo)와 같은 만든 이입니다(문의 메일·홈 주소가 같음). npm 웹 쪽은 자동 읽기를 막을 때가 있어 npm 명령이나 [npm 기록](https://registry.npmjs.org/on-munseo-local/0.2.1)으로 봅니다.
+- **지문**: `on-munseo-local-0.2.1.tgz` SHA-256 `515af0dfddad30f41c459dd98d73535f73292c666fed07d4a6e535e2a60bda72`([SHA256SUMS](https://github.com/on-munseo/on-munseo.github.io/blob/main/SHA256SUMS)). `npm pack on-munseo-local@0.2.1` 뒤 `shasum -a 256 on-munseo-local-0.2.1.tgz` 로 맞대 봅니다. npm 기록의 `dist.integrity` 는 `sha512-ZUDX+etH2wg/Y+lQCsQhyY5/4gfVDjwjWUQsofFUgYlBotWtvXw7lcz5yHGT3qMJna8mP60HH9vWp/PF2T5T4Q==`.
 - **인터넷을 쓰지 않음**: 설치 전에는 꾸러미 안 `MANIFEST.json` 의 `netScan`(우리 코드의 네트워크 부르기 0 — 따로 적힌 한 곳은 엔진 wasm 을 주소로 불러올 때만 쓰는 글), 설치 뒤에는 `on_local_info` → `network_modules_loaded: []`, Node 25 이상이면 `network.blocked_by_node: true`(실행기가 네트워크를 막음). 띄울 때 npx 가 npm 저장소에 새 판을 묻는 것은 npx 의 동작입니다(없애려면 전역 설치 뒤 `on-munseo-local` 명령으로).
-- **이용 조건**: 내 PC 판 [LICENSE.md](https://unpkg.com/on-munseo-local@0.2.0/LICENSE.md)(무료·업무에 써도 됨 · 역공학·고친 판 다시 배포·판매는 안 됨) · 서버 판 [이용약관](https://onmunseo.kr/terms)·[개인정보 처리방침](https://onmunseo.kr/privacy).
+- **이용 조건**: 내 PC 판 [LICENSE.md](https://unpkg.com/on-munseo-local@0.2.1/LICENSE.md)(무료·업무에 써도 됨 · 역공학·고친 판 다시 배포·판매는 안 됨) · 서버 판 [이용약관](https://onmunseo.kr/terms)·[개인정보 처리방침](https://onmunseo.kr/privacy).
 - **On폭 글꼴**은 이 설치와 상관없습니다(한글 문서를 화면에 그릴 때 쓰는 무료 글꼴, 선택).
 
 등록한 그 대화에는 도구가 아직 붙지 않습니다. 끝나면 사용자에게 「도구를 한 번 다시 켜거나 새 대화를 열면 On 문서 내 PC 판 도구가 보입니다」라고 알려 주세요. `claude mcp list`(Codex 는 `codex mcp list`) 목록에 이름이 보이면 등록된 것입니다. 아래 [연결하기](#연결하기)에 도구마다 자세히 있습니다.
@@ -270,6 +270,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 | `ONDOC_LOCAL_READ` | 문서를 읽고 `output_path` 로 쓸 수 있는 폴더(여럿이면 `:` — 윈도우는 `;` — 로 잇기). 주면 그 밖은 Node 가 막습니다 | 모든 곳 |
 | `ONDOC_LOCAL_OUT` | `output_path` 를 주지 않았을 때 결과 파일(가린 한글)을 두는 폴더(처음 쓸 때 만듦) | 홈/On문서_결과 |
 | `ONDOC_LOCAL_SANDBOX` | `0` 이면 실행기(Node 권한 모델)를 끔 | 켬 |
+| `ONDOC_LOCAL_TOOLS` | 켤 도구 묶음만(쉼표로 — `text` 읽기·`check` 점검·`mask` 가리기·`hwpx` 한글 만들기·`gov` 공문서 쓰기·`tidy` 다듬기, 줄임 `read`·`write`(gov+hwpx)·`all`, 도구 이름도 됨). 제품별 플러그인을 여럿 깔아도 도구가 겹치지 않게 씁니다. `on_local_info` 는 늘 켭니다 | 모두 |
 
 `ONDOC_LOCAL_READ` 로 좁혔을 때 그 밖 파일은 「허락 밖」이라고만 답합니다(있는지도 알려 주지 않음).
 
