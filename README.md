@@ -6,7 +6,7 @@
 
 **한국어** · [English summary](#english-summary) · [npm](https://www.npmjs.com/package/on-munseo-local)
 
-`npx -y on-munseo-local@latest`
+`npx -y on-munseo-local@0.2.1`
 
 </div>
 
@@ -18,13 +18,14 @@
 **① 내 PC 판 — 문서를 이 컴퓨터 밖으로 보내지 않음(먼저).** 글 꺼내기·개인정보 가리기·결재 전 점검·공문서 쓰기·한글 파일 만들기·글 다듬기를 이 컴퓨터 안에서 합니다. 이 프로그램은 인터넷을 쓰지 않습니다(설치 뒤 `on_local_info` 로 확인 — 띄울 때 npx 가 npm 저장소에 새 판을 묻는 것은 npx 의 동작이고, 그것까지 없애려면 `npm install -g on-munseo-local` 뒤 명령을 `on-munseo-local` 로). Node.js 20 이상이 있어야 합니다.
 - **지금 쓰는 AI 도구에만**(AI 가 설치할 때는 이것 — 다른 도구의 설정은 건드리지 않음)
   ```bash
-  claude mcp add -s user on-local -- npx -y on-munseo-local@latest
+  claude mcp add -s user on-local -- npx -y on-munseo-local@0.2.1
   ```
-  Codex 는 `codex mcp add on-local -- npx -y on-munseo-local@latest` · 윈도우 Claude Code 는 `claude mcp add -s user on-local -- cmd /c npx -y on-munseo-local@latest` · Cursor·Claude 데스크톱은 설정 파일의 `"mcpServers"` 에 `"on-local": { "command": "npx", "args": ["-y", "on-munseo-local@latest"] }`(윈도우 `"on-local": { "command": "cmd", "args": ["/c", "npx", "-y", "on-munseo-local@latest"] }`) · VS Code 는 `code --add-mcp '{"name":"on-local","command":"npx","args":["-y","on-munseo-local@latest"]}'`
+  Codex 는 `codex mcp add on-local -- npx -y on-munseo-local@0.2.1` · 윈도우 Claude Code 는 `claude mcp add -s user on-local -- cmd /c npx -y on-munseo-local@0.2.1` · Cursor·Claude 데스크톱은 설정 파일의 `"mcpServers"` 에 `"on-local": { "command": "npx", "args": ["-y", "on-munseo-local@0.2.1"] }`(윈도우 `"on-local": { "command": "cmd", "args": ["/c", "npx", "-y", "on-munseo-local@0.2.1"] }`) · VS Code 는 `code --add-mcp '{"name":"on-local","command":"npx","args":["-y","on-munseo-local@0.2.1"]}'`
 - **사람이 이 PC 의 여러 AI 도구에 한 번에** — Claude Code·Claude 데스크톱·Codex·Cursor·VS Code 를 찾아 모두 등록합니다(바꾸기 전에 백업, 이미 있으면 건너뜀, 미리 보기 `--dry-run`, 되돌리기 `--undo`, ②까지 `--pair`).
   ```bash
-  npx -y on-munseo-local@latest setup --pair
+  npx -y on-munseo-local@0.2.1 setup --pair
   ```
+- **판 고정** — 위 줄은 판 번호를 적어 붙입니다(`on-munseo-local@0.2.1`). 자동으로 새 판을 받지 않고, 사람이 올릴 때만 바뀝니다(npm 에 새 판이 올라와도 이미 붙인 판은 그대로 · 인터넷이 끊겨도 한 번 받은 판은 뜸). 새 판으로 올리기: 등록한 줄의 판 번호만 새 판으로 바꿔 다시 붙입니다(Claude Code 는 `claude mcp remove -s user on-local` 뒤 새 판 번호로 위 한 줄) · 바뀐 점: [CHANGELOG](https://github.com/on-munseo/on-local/blob/main/CHANGELOG.md)
 
 **② 짝 주소(법령) — 도구에 넣은 낱말·글만 서버로.** 법령 원문·글 속 인용 확인(On 근거)은 서버에만 있습니다. 서버로 가는 것은 넣은 법령 이름·조문 번호·인용을 확인할 글이고, 파일을 보내는 도구는 없습니다. 인용을 확인할 글에 개인정보가 있으면 ① 의 `on_mask_text` 로 가린 뒤 넣습니다.
 - 지금 쓰는 도구에만(① 의 `setup --pair` 는 ② 까지 함께 붙임):
@@ -64,7 +65,9 @@
 
 <!-- ai-install -->
 
-하나로 다섯 가지 일을 합니다 — 한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 **읽고**(글·표를 마크다운으로), 공문서 꼴 한글 문서(보고서·계획서·결과보고서·보도자료)·예시 양식 66종·서식을 **만들고 채우고**, 공문서 표기를 **점검**하고, 개인정보를 **가립니다**. 법령 원문은 짝 주소(On 근거)로 붙입니다. AI(언어 모델) 없이 규칙으로 합니다.
+하나로 다섯 가지 일을 합니다 — 한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 **읽고**(글·표를 마크다운으로, 두 판의 신구 대비표까지), 공문서 꼴 한글 문서(보고서·계획서·결과보고서·보도자료)·예시 양식 66종·서식을 **만들고 채우고**, 공문서 표기를 **점검**하고, 개인정보를 **찾아 가립니다**(가린 글·가린 한글 파일). 법령 원문은 짝 주소(On 근거)로 붙입니다. AI(언어 모델) 없이 규칙으로 합니다.
+
+**하는 일(일의 낱말로)** — 읽기(한글·PDF·워드·엑셀·파워포인트의 글·표) · 신구 대비표(두 판 견주기) · 결재 전 점검(공문서 형식·맞춤법·날짜·요일·금액) · 개인정보 찾기·가리기(가린 글·가린 한글 파일) · 공문서 쓰기(보고서·계획서·결과보고서·보도자료) · 예시 양식 66종 채우기 · 서식 채우기(칸만 채우고 서식은 그대로) · 글을 표로 · HWP→HWPX 바꾸기 · 글 다듬기(개조식·맞춤법·쉬운 말). 법령 원문·인용 확인은 짝 주소. 도구 이름은 설치 뒤 `on_local_info` 의 `tools_here` 에 모두 나옵니다.
 
 - **문서가 밖으로 나가지 않습니다.** 이 프로그램은 AI 프로그램과 표준 입출력(stdio)으로만 주고받고, 네트워크를 쓰지 않습니다. 업데이트 확인도, 사용 기록 보내기도 없습니다. 하루·분당 사용 한도도 없습니다. [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다)으로 직접 확인할 수 있습니다.
 - **도구가 돌려준 글은 AI 대화로 들어갑니다.** AI 가 클라우드 서비스라면 그 글은 AI 회사로 갑니다. 원문을 대화에 넣지 않으려면 가린 파일만 저장하는 `on_mask_hwpx`, 종류·개수만 돌려주는 `on_find_pii`, 가린 글(`mask: true`)을 씁니다.
@@ -72,7 +75,7 @@
 - **원격 On 문서와 결과가 같습니다.** 원격 MCP 서버(`https://onmunseo.kr/mcp`)와 같은 커밋의 코드로 만들고, 같은 문서를 두 쪽에 보내 결과를 바이트까지 견줍니다([견준 결과](#원격-on-문서와-같은-결과)).
 - **필요한 것은 Node.js 하나입니다.** 한글 프로그램·글꼴·네이티브 부품이 없어도 됩니다. 윈도우·맥에서 같은 꾸러미가 돕니다.
 
-**바로 가기:** [AI 에게 — 설치](#ai-에게--이-꾸러미를-설치하려면) · [무엇을 하나](#무엇을-하나) · [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다) · [연결하기](#연결하기) · [쓰는 예](#쓰는-예) · [같은 결과](#원격-on-문서와-같은-결과) · [빠르기](#빠르기) · [설정](#설정) · [알아 둘 점](#알아-둘-점) · [이용 조건·고지](#이용-조건고지)
+**바로 가기:** [AI 에게 — 설치](#ai-에게--이-꾸러미를-설치하려면) · [무엇을 하나](#무엇을-하나) · [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다) · [믿을 근거](#믿을-근거--남이-다시-확인할-수-있는-것) · [연결하기](#연결하기) · [쓰는 예](#쓰는-예) · [같은 결과](#원격-on-문서와-같은-결과) · [빠르기](#빠르기) · [설정](#설정) · [알아 둘 점](#알아-둘-점) · [이용 조건·고지](#이용-조건고지)
 
 ## 무엇을 하나
 
@@ -114,7 +117,25 @@
 
 - `on_local_info` 의 `network_modules_loaded` 는 지금 이 프로세스에 올라온 HTTP·TLS·이름 찾기·fetch 부품입니다. 도구를 다 부른 뒤에도 비어 있어야 합니다(`net`·`dgram` 은 표준 입출력 파이프 때문에 Node 가 늘 올려서 빼고 셉니다).
 - Node 20~24 에서는 실행기의 네트워크 막기가 없습니다(그 판 권한 모델에 네트워크 항목이 없음). 코드 겹은 그대로이고, `on_local_info` 가 그렇다고 알립니다.
-- **npx 로 띄울 때:** npx 는 띄울 때 npm 저장소에 새 판이 있는지 물어볼 수 있습니다(npx 의 동작이고 이 프로그램이 아닙니다). 이것까지 없게 하려면 한 번 전역 설치(`npm install -g on-munseo-local`)한 뒤 `on-munseo-local` 명령으로 띄우세요.
+- **npx 로 띄울 때:** npx 는 띄울 때 npm 저장소에 새 판이 있는지 물어볼 수 있습니다(npx 의 동작이고 이 프로그램이 아닙니다). 이것까지 없게 하려면 한 번 전역 설치(`npm install -g on-munseo-local`)한 뒤 `on-munseo-local` 명령으로 띄우세요. 판을 고정해 붙이면(아래 [새 판으로 올리기](#새-판으로-올리기)) 인터넷이 끊겨도 한 번 받은 판이 npm 캐시에서 뜹니다(npx 가 새 판 묻기를 기다리다 넘어가 1분쯤 걸릴 수 있음). `@latest` 로 붙이면 끊긴 동안 뜨지 못합니다(직접 잼: 네트워크를 막고 `@0.2.0` 은 70초 뒤 뜸, `@latest` 는 10분 30초 뒤 실패).
+
+## 믿을 근거 — 남이 다시 확인할 수 있는 것
+
+**누구나 다시 잴 수 있는 숫자.** 아래 둘은 공개한 대본·공개 출처·이 npm 꾸러미만으로 돌아갑니다(비공개 코드 없음). 우리가 잰 값이지만, 남이 같은 값을 다시 낼 수 있습니다.
+
+| 무엇 | 값 | 다시 재는 법 |
+|---|---|---|
+| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
+| 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 654개 가운데 **653개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0). 남은 1개는 한 줄에 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — 서식 709개의 원 출처 주소·SHA-1 목록. 두 번 돌려 만든 파일 지문이 모두 같음 |
+
+- 이 판은 글자 인식이 없어 영어 PDF 값은 「글자 인식 없이」 값입니다. 서버 판(원격 On 문서)의 0.971·0.970 은 서버의 글자 인식 모델을 써서 이 대본으로는 재현되지 않습니다.
+- 바탕 읽기 규칙은 이 벤치 200개를 보며 다듬었습니다. 그 밖의 숫자는 대본을 공개하지 않은 자체 측정이고, 정의는 [측정 자료](https://github.com/on-munseo/on-munseo.github.io/blob/main/docs/benchmark.md)에 있습니다.
+
+**서버 판과 같은 결과.** 같은 커밋의 코드로 만들고, 같은 입력을 두 쪽에 보내 결과를 바이트까지 견줍니다(아래 [원격 On 문서와 같은 결과](#원격-on-문서와-같은-결과)).
+
+**꾸러미 확인.** 판을 고정해 붙입니다(`on-munseo-local@0.2.1`). npm 에 새 판이 올라와도 이미 붙인 판은 바뀌지 않고, 사람이 [올릴 때](#새-판으로-올리기)만 바뀝니다. 판마다 지문(SHA-256)은 [릴리스](https://github.com/on-munseo/on-local/releases)·[본 저장소 SHA256SUMS](https://github.com/on-munseo/on-munseo.github.io/blob/main/SHA256SUMS)에, 바뀐 점은 [CHANGELOG](CHANGELOG.md)에 있습니다.
+
+**보안.** 우리 코드의 네트워크 부르기 0(`MANIFEST.json` 의 `netScan`) · Node 25 이상에서 네트워크·다른 프로그램 실행·네이티브 부품을 막고 띄움(`on_local_info`). 서비스 전체의 자체 보안 점검 요약(2026-11-21 전수 점검 — 높음 16건 모두 고침)은 [본 저장소 README](https://github.com/on-munseo/on-munseo.github.io#믿을-근거--남이-다시-확인할-수-있는-것)에 있습니다. 보안 문제는 공개 이슈 대신 [SECURITY.md](SECURITY.md)의 길로 알려 주세요 — 근무일 3일 안에 받았다고 답하고, 7일 안에 판단과 고칠 일정을 알립니다.
 
 ## 연결하기
 
@@ -123,10 +144,11 @@
 **한 번에(setup)** — 이 PC 에 깔린 AI 도구를 찾아 설정 파일에 더합니다:
 
 ```bash
-npx -y on-munseo-local@latest setup            # 첫 줄(내 PC 판)만 — 터미널에서 돌리면 둘째 줄을 붙일지 묻습니다
-npx -y on-munseo-local@latest setup --pair     # 둘째 줄(법령 on-geungeo)까지
-npx -y on-munseo-local@latest setup --dry-run  # 바꿀 것만 보기
-npx -y on-munseo-local@latest setup --undo     # 이 명령이 더한 줄만 빼기
+npx -y on-munseo-local@0.2.1 setup            # 첫 줄(내 PC 판)만 — 터미널에서 돌리면 둘째 줄을 붙일지 묻습니다
+npx -y on-munseo-local@0.2.1 setup --pair     # 둘째 줄(법령 on-geungeo)까지
+npx -y on-munseo-local@0.2.1 setup --dry-run  # 바꿀 것만 보기
+npx -y on-munseo-local@0.2.1 setup --undo     # 이 명령이 더한 줄만 빼기
+npx -y on-munseo-local@latest setup --update  # 새 판으로 올리기 — 등록된 줄의 판 번호만 바꿈(아래)
 ```
 
 - 찾는 도구: Claude Code(`~/.claude.json` — `claude` 명령이 있으면 그 명령으로)·Claude 데스크톱·Codex(`~/.codex/config.toml`)·Cursor(`~/.cursor/mcp.json`)·VS Code(사용자 `mcp.json`).
@@ -135,12 +157,26 @@ npx -y on-munseo-local@latest setup --undo     # 이 명령이 더한 줄만 빼
 - 주석이 든 설정·깨진 설정·낯선 꼴(예: Codex 의 `mcp_servers = { … }` 한 줄 표)·읽기 전용 설정은 건드리지 않고 손으로 더할 한 줄을 알려 줍니다. 심볼릭 링크 설정은 링크를 그대로 두고 가리키는 파일을 고칩니다.
 - setup 도 네트워크를 쓰지 않습니다. 설정 파일만 읽고 쓰고, 법령 묶음은 주소를 글로만 적습니다. Claude 데스크톱의 법령 묶음은 설정 → 커넥터에서 주소로 붙입니다.
 
-도구마다 손으로 붙이려면:
+### 새 판으로 올리기
 
-**Claude Code** — 터미널에 붙여 넣습니다(`-s user` 는 모든 폴더에서 쓰기, `@latest` 는 예전에 깐 옛 판 대신 늘 새 판으로):
+등록 줄에 판 번호를 적어 붙이므로(판 고정 — `on-munseo-local@0.2.1`) 새 판이 나와도 저절로 바뀌지 않습니다. npm 에 문제 있는 판이 올라와도 이미 붙인 판은 그대로입니다. [바뀐 점](CHANGELOG.md)을 보고 올릴 때만:
 
 ```bash
-claude mcp add -s user on-local -- npx -y on-munseo-local@latest
+npx -y on-munseo-local@latest setup --update            # 등록된 on-local 줄의 판 번호만 새 판으로(바꾸기 전 백업)
+npx -y on-munseo-local@latest setup --update --dry-run  # 바꿀 것만 보기
+npx -y on-munseo-local@<옛 판> setup --update           # 옛 판으로 돌리기
+```
+
+- 바꾸는 것은 등록 줄의 판 칸 하나뿐입니다. 다른 칸(환경 변수 등)과 다른 서버는 그대로이고, 등록되지 않은 도구에는 더하지 않습니다. setup 이 더한 줄이면 되돌리기 기록도 새 값으로 바꿔 `--undo` 가 계속 뺍니다.
+- 전역 설치(`on-munseo-local` 명령)로 붙였으면 설정은 그대로 두고 `npm install -g on-munseo-local@<새 판>` 으로 올립니다.
+- `setup --update` 가 없는 옛 판(0.2.1 까지)으로 붙였으면 한 번만 손으로 판 번호를 바꿉니다 — Claude Code: `claude mcp remove -s user on-local` 뒤 `claude mcp add -s user on-local -- npx -y on-munseo-local@<새 판>`. 다른 도구는 설정 파일의 `on-munseo-local@…` 칸만 고칩니다.
+
+도구마다 손으로 붙이려면:
+
+**Claude Code** — 터미널에 붙여 넣습니다(`-s user` 는 모든 폴더에서 쓰기, 끝의 판 번호는 판 고정 — 자동으로 새 판을 받지 않음, 올리기는 [새 판으로 올리기](#새-판으로-올리기)):
+
+```bash
+claude mcp add -s user on-local -- npx -y on-munseo-local@0.2.1
 claude mcp add --transport http -s user on-geungeo https://onmunseo.kr/mcp/law
 ```
 
@@ -158,13 +194,13 @@ claude mcp add -s user on-local -- on-munseo-local
 ```toml
 [mcp_servers.on-local]
 command = "npx"
-args = ["-y", "on-munseo-local@latest"]
+args = ["-y", "on-munseo-local@0.2.1"]
 
 [mcp_servers.on-geungeo]
 url = "https://onmunseo.kr/mcp/law"
 ```
 
-명령 줄 한 줄로는 `codex mcp add on-local -- npx -y on-munseo-local@latest` 입니다. 원격 묶음을 `codex mcp add … --url` 로 붙이면 그때 곧바로 On 문서 로그인 창(브라우저)이 뜹니다 — 열쇠가 없으면 위 설정 파일 꼴을 씁니다. 읽기만 하는 도구에는 읽기 전용 표시(`readOnlyHint`)가 있어 Codex 가 승인을 묻지 않고 부릅니다. 파일을 새로 쓰는 `on_mask_hwpx` 에는 그 표시가 없습니다.
+명령 줄 한 줄로는 `codex mcp add on-local -- npx -y on-munseo-local@0.2.1` 입니다. 원격 묶음을 `codex mcp add … --url` 로 붙이면 그때 곧바로 On 문서 로그인 창(브라우저)이 뜹니다 — 열쇠가 없으면 위 설정 파일 꼴을 씁니다. 읽기만 하는 도구에는 읽기 전용 표시(`readOnlyHint`)가 있어 Codex 가 승인을 묻지 않고 부릅니다. 파일을 새로 쓰는 `on_mask_hwpx` 에는 그 표시가 없습니다.
 
 **Claude 데스크톱** — 맥 `~/Library/Application Support/Claude/claude_desktop_config.json` · 윈도우 `%APPDATA%\Claude\claude_desktop_config.json`:
 
@@ -173,13 +209,13 @@ url = "https://onmunseo.kr/mcp/law"
   "mcpServers": {
     "on-local": {
       "command": "npx",
-      "args": ["-y", "on-munseo-local@latest"]
+      "args": ["-y", "on-munseo-local@0.2.1"]
     }
   }
 }
 ```
 
-저장한 뒤 Claude 데스크톱을 다시 켭니다. 법령 묶음(`https://onmunseo.kr/mcp/law`)은 설정 → 커넥터 → 「사용자 지정 커넥터 추가」에 주소를 넣어 붙입니다. 윈도우에서 `npx` 를 찾지 못하면 `"command": "cmd"`, `"args": ["/c", "npx", "-y", "on-munseo-local@latest"]` 로 줍니다. 읽을 폴더·결과 폴더를 바꾸려면 `on-local` 에 `"env": { "ONDOC_LOCAL_READ": "D:\\문서", "ONDOC_LOCAL_OUT": "D:\\On문서_결과" }` 를 더합니다([설정](#설정)).
+저장한 뒤 Claude 데스크톱을 다시 켭니다. 법령 묶음(`https://onmunseo.kr/mcp/law`)은 설정 → 커넥터 → 「사용자 지정 커넥터 추가」에 주소를 넣어 붙입니다. 윈도우에서 `npx` 를 찾지 못하면 `"command": "cmd"`, `"args": ["/c", "npx", "-y", "on-munseo-local@0.2.1"]` 로 줍니다. 읽을 폴더·결과 폴더를 바꾸려면 `on-local` 에 `"env": { "ONDOC_LOCAL_READ": "D:\\문서", "ONDOC_LOCAL_OUT": "D:\\On문서_결과" }` 를 더합니다([설정](#설정)).
 
 **Cursor** — `~/.cursor/mcp.json`(모든 프로젝트) 또는 프로젝트의 `.cursor/mcp.json`:
 
@@ -188,7 +224,7 @@ url = "https://onmunseo.kr/mcp/law"
   "mcpServers": {
     "on-local": {
       "command": "npx",
-      "args": ["-y", "on-munseo-local@latest"]
+      "args": ["-y", "on-munseo-local@0.2.1"]
     },
     "on-geungeo": {
       "url": "https://onmunseo.kr/mcp/law"
@@ -205,7 +241,7 @@ url = "https://onmunseo.kr/mcp/law"
     "on-local": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "on-munseo-local@latest"]
+      "args": ["-y", "on-munseo-local@0.2.1"]
     },
     "on-geungeo": {
       "type": "http",
@@ -303,7 +339,9 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 - **Your documents stay on your machine.** It talks to your AI app over stdio only and uses no network: no update checks, no telemetry. Our code imports no network modules (checked at build time, see `netScan` in `MANIFEST.json`). On Node 25+, it relaunches itself under the Node permission model with network, child processes and native add-ons denied, file writes limited to the output folder. Ask your AI to call `on_local_info` to verify (`blocked_by_node: true`, `network_modules_loaded: []`).
 - **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
-- **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@latest`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@latest`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@latest"]`. Or run `npx -y on-munseo-local@latest setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
+- **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@0.2.1`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@0.2.1`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@0.2.1"]`. Or run `npx -y on-munseo-local@0.2.1 setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
+- **Pinned version:** registration lines pin the version (`on-munseo-local@0.2.1`); nothing updates by itself. To update: `npx -y on-munseo-local@latest setup --update` (changes only the version in registered entries, backs up first, `--dry-run`). Changes: [CHANGELOG](CHANGELOG.md).
+- **Re-runnable numbers:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.945 with this npm package alone (no OCR) — [script](repro/opendataloader-bench); form filling on 709 public statute forms: 653 of the 654 filled files keep the original form byte-for-byte outside the filled text — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
 - **What goes to your AI:** text returned by a tool enters your AI conversation (and the AI provider, if it is a cloud service). To keep originals out of the chat, use `on_mask_hwpx` (writes the masked file only), `on_find_pii` (kinds and counts) or `mask: true`.
 - **Not included:** OCR for scanned pages, chart and diagram images, page images and PDF output (they need a native graphics library) — use the remote server for those (documents are then sent to it). Charts and diagrams in a drafted document become tables. Documents with security classification marks are refused. Results are for reference; please review before use.
 - **Terms:** free to use for individuals and organizations, including at work; no reverse engineering, no redistribution of modified versions, no resale — see `LICENSE.md`. Open-source components keep their own licenses (`NOTICE.md`).
