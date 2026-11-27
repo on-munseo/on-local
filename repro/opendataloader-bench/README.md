@@ -13,6 +13,7 @@
 - 공식 채점기가 낸 값 그대로입니다(`expected/evaluation_summary.json`). 시험용·개발용은 공식 채점기의 문서별 값(`evaluation.csv`)을 문서 id 로 나눠 우리가 평균한 것입니다(나누는 법은 아래 「한계」).
 - 같은 꾸러미로 다섯 번 돌렸습니다. 있던 벤치 사본에서 두 번, 새로 clone 한 벤치에서 `uv sync` 뒤 세 번(Node 25.9 두 번 · Node 22.17 한 번)입니다. 다섯 번 모두 예측 마크다운 200개의 SHA-256 이 같았고, 오류는 0이었습니다. 새 clone 의 `uv run src/evaluator.py` 채점과 있던 사본의 채점도 같은 값이었습니다.
 - 0.2.1 로도 같습니다 — `node run.mjs . --pkg on-munseo-local@0.2.1` 로 돌린 예측 200개가 바이트까지 같았습니다(SHA256SUMS.predictions 의 SHA-256 `3ce7995d…70564b7` 같음, 2026-11-27).
+- 0.3.0 으로도 같습니다 — 올리기 전 공개판 묶음(`on-munseo-local-0.3.0.tgz`, SHA-256 `6bd0f6c6…5955f4a` — 본 저장소 SHA256SUMS)으로 `node run.mjs <벤치> --pkg file:<묶음 경로>` 를 돌린 예측 200개가 바이트까지 같았습니다(같은 SHA-256, 2026-11-27). 0.3.0 부터 꾸러미의 기본 읽는 곳이 내 홈 폴더라, 대본이 벤치 폴더를 `ONDOC_LOCAL_READ` 로 함께 줍니다.
 - 꾸러미 지문: `on-munseo-local-0.2.0.tgz` SHA-256 `a3d2ecb03bcf53e4bf97555b190cd5b200f4388e726dbc11ade6e0835cfecd72`, npm `dist.integrity` `sha512-pyNyYarxtKoWu+5clkIIa1IICoampkw576tUOP7k7n7Ej/aF40y/rq/OoIN9zf/2mGguhTmNJE5HoKg2IEFz9A==`. 돌린 환경은 `expected/environment.json` 에 있습니다.
 - 문서당 시간은 0.016~0.021초였습니다(맥북 M5 Pro, 표준 입출력 주고받기 포함, 서버 띄우는 시간 뺌). 다른 컴퓨터에서 잰 시간과는 견주지 마세요.
 
