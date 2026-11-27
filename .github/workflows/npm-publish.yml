@@ -108,10 +108,12 @@ jobs:
         if: ${{ inputs.mode != 'check' }}
         run: |
           set -euo pipefail
-          sleep 20
           want=$(node -e 'const c=require("crypto"),f=require("fs");console.log("sha512-"+c.createHash("sha512").update(f.readFileSync(process.argv[1])).digest("base64"))' "dl/$PKG-$VERSION.tgz")
           if [ "$MODE" = publish ]; then
-            got=$(npm view "$PKG@$VERSION" dist.integrity)
+            # npm 은 올린 뒤 몇 분 「처리 중」이라 바로 보이지 않음 — 최대 10분 기다림(11-27 0.3.0 때 20초로는 404)
+            got=""
+            for i in $(seq 1 40); do got=$(npm view "$PKG@$VERSION" dist.integrity 2>/dev/null || true); [ -n "$got" ] && break; sleep 15; done
+            [ -n "$got" ] || { echo "10분 안에 npm 에 보이지 않음 — 나중에 npm view $PKG@$VERSION 로 확인"; exit 1; }
             [ "$got" = "$want" ] || { echo "npm 기록의 integrity 가 다름: $got"; exit 1; }
             npm view "$PKG@$VERSION" dist.attestations --json || true
             echo "확인: npm view $PKG@$VERSION dist.integrity = $got"
