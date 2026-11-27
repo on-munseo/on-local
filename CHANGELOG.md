@@ -7,7 +7,7 @@
 ## 다음 판(준비 중)
 
 - **판 고정 등록** — `setup` 이 등록 줄에 그 판 번호를 적습니다(`on-munseo-local@<판>`). 예전에는 `@latest` 라 npm 에 새 판이 오르면 다음 실행에 바로 바뀌었습니다.
-- **`setup --update`** — 이미 등록된 `on-local` 줄의 판 번호만 새 판으로 바꿉니다. 바꾸기 전에 백업하고, 다른 칸·다른 서버는 그대로 둡니다. `--dry-run` 으로 미리 볼 수 있습니다. 옛 판으로 돌리려면 `npx -y on-munseo-local@<옛 판> setup --update` 를 씁니다.
+- **`setup --update`** — 이미 등록된 `on-local` 줄의 판 번호만 새 판으로 바꿉니다. 바꾸기 전에 백업하고, 다른 칸·다른 서버는 그대로 둡니다. `--dry-run` 으로 미리 볼 수 있습니다. 옛 판으로 돌리려면 `npx -y on-munseo-local@latest setup --update --to <옛 판>` 을 씁니다(옛 판의 setup 에는 `--update` 가 없을 수 있어 새 판의 setup 이 옛 판 번호를 적음).
 - `on_local_info` 첫머리에 이 판이 하는 일을 한 줄로 적습니다(`does` — 읽기·신구 대비표·결재 전 점검·개인정보 가리기·공문서 쓰기·양식·서식 채우기·표·HWPX 바꾸기·다듬기).
 - 서버 안내 첫 줄에 「개인정보 가리기(`on_mask_hwpx`)」「두 판 신구 대비표(`on_compare`)」를 적습니다.
 

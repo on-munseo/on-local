@@ -1,0 +1,72 @@
+{
+  "what": "korean-pii-benchmark-v3(허깅페이스 schift-io, CC-BY-SA-4.0) 473줄 — on-munseo-local 의 on_mask_text·on_find_pii(text)로 잼. 채점 정의는 run.mjs 머리 주석",
+  "data": {
+    "url": "https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3/resolve/6dfeb331800d9c3b6318e40f92fe57d317e9ae3f/benchmark_v3.jsonl",
+    "sha256": "0aa9303bff69b895bd4f29da451ac8f5c4a86220f80b1314cb9f7279a68279dc",
+    "rows": 473
+  },
+  "package": "on-munseo-local@0.2.1",
+  "version": "0.2.1",
+  "commit": "78e9a20a12b8513dde6aefb3af526672b6743e65",
+  "network_blocked_by_node": true,
+  "node": "v25.9.0",
+  "platform": "darwin 25.6.0 arm64",
+  "cpu": "Apple M5 Pro",
+  "date": "2026-11-27",
+  "by_kind": {
+    "private_address": {
+      "tp": 138,
+      "fp": 0,
+      "fn": 3,
+      "recall": 97.9,
+      "precision": 100
+    },
+    "private_email": {
+      "tp": 3,
+      "fp": 0,
+      "fn": 0,
+      "recall": 100,
+      "precision": 100
+    },
+    "private_organization": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 182,
+      "recall": 0,
+      "precision": null
+    },
+    "private_person": {
+      "tp": 393,
+      "fp": 0,
+      "fn": 18,
+      "recall": 95.6,
+      "precision": 100
+    },
+    "private_phone": {
+      "tp": 28,
+      "fp": 0,
+      "fn": 37,
+      "recall": 43.1,
+      "precision": 100
+    },
+    "resident_id": {
+      "tp": 1,
+      "fp": 0,
+      "fn": 0,
+      "recall": 100,
+      "precision": 100
+    }
+  },
+  "negatives": {
+    "rows": 59,
+    "masked_rows_scored_kinds": 0,
+    "masked_rows_any_kind": 0
+  },
+  "not_scored_masks": {},
+  "checks": {
+    "align_failed_rows": 0,
+    "find_vs_mask_count_mismatch_rows": 0,
+    "errors": 0
+  },
+  "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa"
+}

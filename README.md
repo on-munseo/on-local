@@ -121,12 +121,13 @@
 
 ## 믿을 근거 — 남이 다시 확인할 수 있는 것
 
-**누구나 다시 잴 수 있는 숫자.** 아래 둘은 공개한 대본·공개 출처·이 npm 꾸러미만으로 돌아갑니다(비공개 코드 없음). 우리가 잰 값이지만, 남이 같은 값을 다시 낼 수 있습니다.
+**누구나 다시 잴 수 있는 숫자.** 아래 셋은 공개한 대본·공개 출처·이 npm 꾸러미만으로 돌아갑니다(비공개 코드 없음). 우리가 잰 값이지만, 남이 같은 값을 다시 낼 수 있습니다.
 
 | 무엇 | 값 | 다시 재는 법 |
 |---|---|---|
 | 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
 | 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 654개 가운데 **653개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0). 남은 1개는 한 줄에 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — 서식 709개의 원 출처 주소·SHA-1 목록. 두 번 돌려 만든 파일 지문이 모두 같음 |
+| 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 지역번호로 시작하는 일반 전화 43.1%(휴대전화는 모두 찾음). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.2.1`(서버 판과 같은 모델·같은 값). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
 
 - 이 판은 글자 인식이 없어 영어 PDF 값은 「글자 인식 없이」 값입니다. 서버 판(원격 On 문서)의 0.971·0.970 은 서버의 글자 인식 모델을 써서 이 대본으로는 재현되지 않습니다.
 - 바탕 읽기 규칙은 이 벤치 200개를 보며 다듬었습니다. 그 밖의 숫자는 대본을 공개하지 않은 자체 측정이고, 정의는 [측정 자료](https://github.com/on-munseo/on-munseo.github.io/blob/main/docs/benchmark.md)에 있습니다.
@@ -164,7 +165,7 @@ npx -y on-munseo-local@latest setup --update  # 새 판으로 올리기 — 등�
 ```bash
 npx -y on-munseo-local@latest setup --update            # 등록된 on-local 줄의 판 번호만 새 판으로(바꾸기 전 백업)
 npx -y on-munseo-local@latest setup --update --dry-run  # 바꿀 것만 보기
-npx -y on-munseo-local@<옛 판> setup --update           # 옛 판으로 돌리기
+npx -y on-munseo-local@latest setup --update --to <옛 판>  # 옛 판으로 돌리기(새 판의 setup 이 옛 판 번호를 적음)
 ```
 
 - 바꾸는 것은 등록 줄의 판 칸 하나뿐입니다. 다른 칸(환경 변수 등)과 다른 서버는 그대로이고, 등록되지 않은 도구에는 더하지 않습니다. setup 이 더한 줄이면 되돌리기 기록도 새 값으로 바꿔 `--undo` 가 계속 뺍니다.

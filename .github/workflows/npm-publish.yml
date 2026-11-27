@@ -98,10 +98,11 @@ jobs:
         run: |
           set -euo pipefail
           f="./dl/$PKG-$VERSION.tgz"
+          tag=(); [[ "$VERSION" == *-* ]] && tag=(--tag next)      # 미리 보는 판(1.2.3-beta.1)은 latest 가 아니라 next 로 — npm 11 은 태그를 꼭 달라고 함
           case "$MODE" in
-            check)   npm publish "$f" --access public --dry-run ;;      # 검사만 — 출처 증명 서명(공개 기록)은 만들지 않음
-            stage)   npm stage publish "$f" --provenance --access public ;;  # 승인: 맥에서 npm stage approve <id> (2단계 인증) — 처음엔 check 로 먼저
-            publish) npm publish "$f" --provenance --access public ;;
+            check)   npm publish "$f" --access public --dry-run ${tag[@]+"${tag[@]}"} ;;      # 검사만 — 출처 증명 서명(공개 기록)은 만들지 않음
+            stage)   npm stage publish "$f" --provenance --access public ${tag[@]+"${tag[@]}"} ;;  # 승인: 맥에서 npm stage approve <id> (2단계 인증) — 처음엔 check 로 먼저
+            publish) npm publish "$f" --provenance --access public ${tag[@]+"${tag[@]}"} ;;
           esac
       - name: After publishing — registry fingerprint and attestation
         if: ${{ inputs.mode != 'check' }}
