@@ -2,7 +2,7 @@
 
 # On 문서 내 PC 판
 
-문서를 이 컴퓨터 밖으로 보내지 않고 글 꺼내기·개인정보 가리기·결재 전 점검을 하는 MCP 서버
+문서를 이 컴퓨터 밖으로 보내지 않고 글 꺼내기·한글 문서 만들기·결재 전 점검·개인정보 가리기를 하는 MCP 서버
 
 **한국어** · [English summary](#english-summary) · [npm](https://www.npmjs.com/package/on-munseo-local)
 
@@ -32,20 +32,24 @@
   code --add-mcp '{"name":"on-local","command":"npx","args":["-y","on-munseo-local@latest"]}'
   ```
 - **Claude 데스크톱** — 설정 파일(맥 `~/Library/Application Support/Claude/claude_desktop_config.json`, 윈도우 `%APPDATA%\Claude\claude_desktop_config.json`)의 `"mcpServers"` 에 위 Cursor 와 같은 한 줄을 더하고 앱을 다시 켭니다.
+- **여러 도구에 한 번에** — 이 PC 에 깔린 도구(Claude Code·Claude 데스크톱·Codex·Cursor·VS Code)를 찾아 모두 등록합니다. 설정을 바꾸기 전에 백업을 두고, 이미 있으면 건너뜁니다(미리 보기 `--dry-run`, 되돌리기 `--undo`).
+  ```bash
+  npx -y on-munseo-local@latest setup
+  ```
 
-등록한 그 대화에는 도구가 아직 붙지 않습니다. 끝나면 사용자에게 「도구를 한 번 다시 켜거나 새 대화를 열면 On 문서 내 PC 판 도구가 보입니다」라고 알려 주세요. `claude mcp list`(Codex 는 `codex mcp list`) 목록에 `on-local` 줄이 있으면 등록된 것입니다. 보고서 쓰기·법령 원문(원격 묶음)을 함께 붙이는 법은 아래 [연결하기](#연결하기).
+등록한 그 대화에는 도구가 아직 붙지 않습니다. 끝나면 사용자에게 「도구를 한 번 다시 켜거나 새 대화를 열면 On 문서 내 PC 판 도구가 보입니다」라고 알려 주세요. `claude mcp list`(Codex 는 `codex mcp list`) 목록에 `on-local` 줄이 있으면 등록된 것입니다. 법령 원문·인용 확인(원격 묶음 `on-geungeo` — On 근거)도 붙일지는 사용자에게 물어보고, 원하면 `setup --pair` 또는 아래 [연결하기](#연결하기)의 둘째 줄로 붙입니다(그 도구에는 문서가 아니라 질문만 갑니다).
 
 <!-- ai-install -->
 
-한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 읽어 글과 표를 마크다운으로 꺼내고, 개인정보를 찾아 가리고, 공문서 표기를 점검합니다. AI(언어 모델) 없이 규칙으로 합니다.
+하나로 다섯 가지 일을 합니다 — 한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 **읽고**(글·표를 마크다운으로), 공문서 꼴 한글 문서(보고서·계획서·결과보고서·보도자료)·예시 양식 66종·서식을 **만들고 채우고**, 공문서 표기를 **점검**하고, 개인정보를 **가립니다**. 법령 원문은 짝 주소(On 근거)로 붙입니다. AI(언어 모델) 없이 규칙으로 합니다.
 
 - **문서가 밖으로 나가지 않습니다.** 이 프로그램은 AI 프로그램과 표준 입출력(stdio)으로만 주고받고, 네트워크를 쓰지 않습니다. 업데이트 확인도, 사용 기록 보내기도 없습니다. 하루·분당 사용 한도도 없습니다. [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다)으로 직접 확인할 수 있습니다.
 - **도구가 돌려준 글은 AI 대화로 들어갑니다.** AI 가 클라우드 서비스라면 그 글은 AI 회사로 갑니다. 원문을 대화에 넣지 않으려면 가린 파일만 저장하는 `on_mask_hwpx`, 종류·개수만 돌려주는 `on_find_pii`, 가린 글(`mask: true`)을 씁니다.
-- **보고서·법령은 서버 묶음을 함께 붙이세요.** 공문서 쓰기(`https://onmunseo.kr/mcp/gov`)와 법령 원문(`https://onmunseo.kr/mcp/law`)은 원격 On 문서에만 있습니다. 그 묶음의 도구에 넣은 원고·낱말·자료만 서버로 가고, 이 판의 도구는 계속 이 컴퓨터 안에서만 돕니다([연결하기](#연결하기)).
+- **법령은 짝 주소를 함께 붙이세요.** 법령 원문·글 속 인용 확인(On 근거, `https://onmunseo.kr/mcp/law`)은 원격에만 있습니다. 그 도구에는 문서가 아니라 질문(법령 이름·조문 번호·인용을 확인할 글)만 가고, 이 판의 도구는 계속 이 컴퓨터 안에서만 돕니다([연결하기](#연결하기)).
 - **원격 On 문서와 결과가 같습니다.** 원격 MCP 서버(`https://onmunseo.kr/mcp`)와 같은 커밋의 코드로 만들고, 같은 문서를 두 쪽에 보내 결과를 바이트까지 견줍니다([견준 결과](#원격-on-문서와-같은-결과)).
 - **필요한 것은 Node.js 하나입니다.** 한글 프로그램·글꼴·네이티브 부품이 없어도 됩니다. 윈도우·맥에서 같은 꾸러미가 돕니다.
 
-**바로 가기:** [무엇을 하나](#무엇을-하나) · [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다) · [연결하기](#연결하기) · [쓰는 예](#쓰는-예) · [같은 결과](#원격-on-문서와-같은-결과) · [빠르기](#빠르기) · [설정](#설정) · [알아 둘 점](#알아-둘-점) · [이용 조건·고지](#이용-조건고지)
+**바로 가기:** [AI 에게 — 설치](#ai-에게--이-꾸러미를-설치하려면) · [무엇을 하나](#무엇을-하나) · [확인하는 법](#확인하는-법--문서가-밖으로-나가지-않는다) · [연결하기](#연결하기) · [쓰는 예](#쓰는-예) · [같은 결과](#원격-on-문서와-같은-결과) · [빠르기](#빠르기) · [설정](#설정) · [알아 둘 점](#알아-둘-점) · [이용 조건·고지](#이용-조건고지)
 
 ## 무엇을 하나
 
@@ -60,10 +64,18 @@
 | | `on_mask_text` | 개인정보를 가린 글 |
 | | `on_mask_hwpx` | 개인정보를 가린 한글 파일(`output_path` 나 결과 폴더에 새 파일, 원본은 그대로) |
 | On 결재점검 | `on_check_text` | 공문서 형식·맞춤법·띄어쓰기·날짜·요일·금액·목록 합계·번호 점검(문서는 고치지 않음) |
+| On 공문서 쓰기 | `on_write_gov` | 원고(마크다운·짜임)를 보고서·계획서·결과보고서·보도자료·기안문·공고문 꼴 한글(HWPX)로. 쪽 맞춤·목차 쪽 번호, 고칠 곳(`quality`)·짧게 남은 끝 줄(`short_last_lines`)·다시 읽어 견준 결과(`check`) |
+| | `on_list_templates` · `on_fill_template` | 예시 양식 66종(계획·보고·행사·공고·보도자료 등) 목록 · 양식 하나에 자료(글·`file_paths`)를 맞는 장에 넣기 |
+| | `on_table` | 「항목: 값」·탭(엑셀 복사)·「\|」 줄을 공문서 표로(원문 숫자 대조·합계 확인) |
+| On 한글파일 만들기 | `on_write` | 마크다운을 꾸밈 없는 한글(HWPX)로(공문서처럼 보이는 원고는 공문서 꼴로 — `plain: true` 면 끔) |
+| | `on_to_hwpx` | 문서를 HWPX 로 — 예전 한글(.hwp)은 서식 그대로, PDF·워드·엑셀·파워포인트는 읽은 글·표로 다시 짬 |
+| | `on_fields` · `on_fill` | 서식(한글)의 채울 곳 찾기(누름틀·이름 칸) · 값 넣기 |
+| On 글 다듬기 | `on_gaejo` · `on_spell` · `on_plain` | 개조식으로 · 틀린 것이 거의 확실한 맞춤법·띄어쓰기 · 쉬운 말로 |
 | 상태 | `on_local_info` | 네트워크가 막혔는지·올라온 네트워크 부품·읽는 폴더·결과 폴더·만든 판 |
 
 - 문서는 `file_path` 에 내 컴퓨터의 전체 경로로 줍니다(예: `~/문서/계획서.hwp`, `D:\문서\계획서.hwpx` — `~` 는 내 홈 폴더). 한글·빈칸이 든 경로도 됩니다. 대비표는 `a_path`·`b_path`. base64 로 싣지 않으므로 큰 문서도 대화가 무거워지지 않습니다.
-- 가린 한글은 `output_path`(예: `~/문서/계획서_가림.hwpx`)에 저장합니다. 주지 않으면 결과 폴더(`~/On문서_결과`)에 둡니다. 새 파일만 만들고, 같은 이름이 있으면 덮어쓰지 않고 「(2)」를 붙입니다.
+- 만든 한글(공문서·양식·표·서식 채우기·HWPX 바꾸기·가린 한글)은 `output_path`(예: `~/문서/보고서.hwpx`)에 저장합니다. 주지 않으면 결과 폴더(`~/On문서_결과`)에 둡니다. 새 파일만 만들고, 같은 이름이 있으면 덮어쓰지 않고 「(2)」를 붙입니다.
+- 그림 부품(네이티브)이 있어야 하는 것은 이 판에 없습니다: 그래프·체계도 그림(`on_chart`·`on_diagram` — `on_write_gov` 원고 안의 그래프·체계도는 그림 대신 표로 들어감), 쪽 그림·PDF(`preview` 포함), 도장. 이것들과 글자 인식은 원격 On 문서(`https://onmunseo.kr/mcp`)에 있습니다.
 - 채팅에 붙여 넣은 글은 `on_check_text`·`on_find_pii`·`on_mask_text` 의 `text` 로 줍니다.
 - 개인정보 찾기에는 On 문서가 처음부터 학습한 작은 모델(꾸러미 안, CPU)도 함께 씁니다. 원격 On 문서와 같은 모델입니다.
 
@@ -83,13 +95,29 @@
 
 ## 연결하기
 
-한 벌로 붙입니다. **첫 줄은 내 PC 판**(문서 읽기·개인정보 가리기·결재 전 점검 — 이 컴퓨터 안에서만), **다음 두 줄은 원격 On 문서의 공문서 쓰기·법령 묶음**입니다. 원격 묶음은 그 도구에 넣은 원고·낱말·자료(예: `on_fill_template` 에 준 자료 파일)만 서버로 갑니다. 원격 묶음을 빼고 첫 줄만 붙여도 됩니다.
+두 줄 한 벌로 붙입니다. **첫 줄은 내 PC 판**(`on-local` — 읽기·만들기·점검·가리기, 이 컴퓨터 안에서만), **둘째 줄은 원격 법령 묶음**(`on-geungeo` — On 근거: 법령 원문·글 속 인용 확인)입니다. 법령 묶음에는 문서가 아니라 질문(법령 이름·조문 번호·인용을 확인할 글)만 갑니다. 둘째 줄을 빼고 첫 줄만 붙여도 됩니다.
+
+**한 번에(setup)** — 이 PC 에 깔린 AI 도구를 찾아 설정 파일에 더합니다:
+
+```bash
+npx -y on-munseo-local@latest setup            # 첫 줄(내 PC 판)만 — 터미널에서 돌리면 둘째 줄을 붙일지 묻습니다
+npx -y on-munseo-local@latest setup --pair     # 둘째 줄(법령 on-geungeo)까지
+npx -y on-munseo-local@latest setup --dry-run  # 바꿀 것만 보기
+npx -y on-munseo-local@latest setup --undo     # 이 명령이 더한 줄만 빼기
+```
+
+- 찾는 도구: Claude Code(`~/.claude.json` — `claude` 명령이 있으면 그 명령으로)·Claude 데스크톱·Codex(`~/.codex/config.toml`)·Cursor(`~/.cursor/mcp.json`)·VS Code(사용자 `mcp.json`).
+- 설정 파일을 바꾸기 전에 그 옆에 백업(`<파일>.bak-<날짜시각>`)을 두고, 같은 이름이 이미 있으면 건너뜁니다(덮어쓰지 않음). 바꾼 뒤 다시 읽어 우리 줄이 맞고 다른 내용이 그대로인지 보고, 아니면 백업으로 되돌립니다.
+- 더한 줄은 `~/.on-munseo-local/setup.json` 에 적어 두고, `--undo` 는 그 기록과 값이 그대로인 줄만 뺍니다(사람이 더했거나 고친 줄은 그대로). 전역 설치(폐쇄망 묶음 포함)로 돌리면 설정에 `npx` 대신 깔린 명령 `on-munseo-local` 을 적어 인터넷 없이 뜹니다.
+- 주석이 든 설정·깨진 설정·낯선 꼴(예: Codex 의 `mcp_servers = { … }` 한 줄 표)·읽기 전용 설정은 건드리지 않고 손으로 더할 한 줄을 알려 줍니다. 심볼릭 링크 설정은 링크를 그대로 두고 가리키는 파일을 고칩니다.
+- setup 도 네트워크를 쓰지 않습니다. 설정 파일만 읽고 쓰고, 법령 묶음은 주소를 글로만 적습니다. Claude 데스크톱의 법령 묶음은 설정 → 커넥터에서 주소로 붙입니다.
+
+도구마다 손으로 붙이려면:
 
 **Claude Code** — 터미널에 붙여 넣습니다(`-s user` 는 모든 폴더에서 쓰기, `@latest` 는 예전에 깐 옛 판 대신 늘 새 판으로):
 
 ```bash
 claude mcp add -s user on-local -- npx -y on-munseo-local@latest
-claude mcp add --transport http -s user on-gov https://onmunseo.kr/mcp/gov
 claude mcp add --transport http -s user on-geungeo https://onmunseo.kr/mcp/law
 ```
 
@@ -100,17 +128,14 @@ npm install -g on-munseo-local
 claude mcp add -s user on-local -- on-munseo-local
 ```
 
-등록한 그 대화에는 도구가 아직 붙지 않습니다. 앱을 다시 켜거나 새 대화를 열면 그다음부터 씁니다. 열쇠가 없으면 원격 묶음은 로그인 단계를 건너뛰고 손님으로 씁니다.
+등록한 그 대화에는 도구가 아직 붙지 않습니다. 앱을 다시 켜거나 새 대화를 열면 그다음부터 씁니다. 열쇠가 없으면 법령 묶음은 로그인 단계를 건너뛰고 손님으로 씁니다.
 
-**Codex(OpenAI)** — 설정 파일 `~/.codex/config.toml` 에 적습니다. 이렇게 붙이면 로그인 창이 뜨지 않고, 열쇠가 없으면 원격 묶음은 손님으로 씁니다:
+**Codex(OpenAI)** — 설정 파일 `~/.codex/config.toml` 에 적습니다. 이렇게 붙이면 로그인 창이 뜨지 않고, 열쇠가 없으면 법령 묶음은 손님으로 씁니다:
 
 ```toml
 [mcp_servers.on-local]
 command = "npx"
 args = ["-y", "on-munseo-local@latest"]
-
-[mcp_servers.on-gov]
-url = "https://onmunseo.kr/mcp/gov"
 
 [mcp_servers.on-geungeo]
 url = "https://onmunseo.kr/mcp/law"
@@ -126,20 +151,12 @@ url = "https://onmunseo.kr/mcp/law"
     "on-local": {
       "command": "npx",
       "args": ["-y", "on-munseo-local@latest"]
-    },
-    "on-gov": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://onmunseo.kr/mcp/gov"]
-    },
-    "on-geungeo": {
-      "command": "npx",
-      "args": ["-y", "mcp-remote", "https://onmunseo.kr/mcp/law"]
     }
   }
 }
 ```
 
-저장한 뒤 Claude 데스크톱을 다시 켭니다. 원격 두 묶음은 설정 → 커넥터 → 「사용자 지정 커넥터 추가」에 주소를 넣어 붙여도 됩니다(그때는 위 파일에 `on-local` 만 둡니다). 윈도우에서 `npx` 를 찾지 못하면 `"command": "cmd"`, `"args": ["/c", "npx", "-y", "on-munseo-local@latest"]` 로 줍니다. 읽을 폴더·결과 폴더를 바꾸려면 `on-local` 에 `"env": { "ONDOC_LOCAL_READ": "D:\\문서", "ONDOC_LOCAL_OUT": "D:\\On문서_결과" }` 를 더합니다([설정](#설정)).
+저장한 뒤 Claude 데스크톱을 다시 켭니다. 법령 묶음(`https://onmunseo.kr/mcp/law`)은 설정 → 커넥터 → 「사용자 지정 커넥터 추가」에 주소를 넣어 붙입니다. 윈도우에서 `npx` 를 찾지 못하면 `"command": "cmd"`, `"args": ["/c", "npx", "-y", "on-munseo-local@latest"]` 로 줍니다. 읽을 폴더·결과 폴더를 바꾸려면 `on-local` 에 `"env": { "ONDOC_LOCAL_READ": "D:\\문서", "ONDOC_LOCAL_OUT": "D:\\On문서_결과" }` 를 더합니다([설정](#설정)).
 
 **Cursor** — `~/.cursor/mcp.json`(모든 프로젝트) 또는 프로젝트의 `.cursor/mcp.json`:
 
@@ -150,9 +167,6 @@ url = "https://onmunseo.kr/mcp/law"
       "command": "npx",
       "args": ["-y", "on-munseo-local@latest"]
     },
-    "on-gov": {
-      "url": "https://onmunseo.kr/mcp/gov"
-    },
     "on-geungeo": {
       "url": "https://onmunseo.kr/mcp/law"
     }
@@ -160,7 +174,7 @@ url = "https://onmunseo.kr/mcp/law"
 }
 ```
 
-**VS Code** — 작업 공간의 `.vscode/mcp.json`:
+**VS Code** — 사용자 설정 `mcp.json`(명령 팔레트 「MCP: Open User Configuration」) 또는 작업 공간의 `.vscode/mcp.json`:
 
 ```json
 {
@@ -170,10 +184,6 @@ url = "https://onmunseo.kr/mcp/law"
       "command": "npx",
       "args": ["-y", "on-munseo-local@latest"]
     },
-    "on-gov": {
-      "type": "http",
-      "url": "https://onmunseo.kr/mcp/gov"
-    },
     "on-geungeo": {
       "type": "http",
       "url": "https://onmunseo.kr/mcp/law"
@@ -182,7 +192,7 @@ url = "https://onmunseo.kr/mcp/law"
 }
 ```
 
-**폐쇄망(업무망)** — 인터넷이 되는 곳에서 받은 「부품까지 묶은 판」(`on-munseo-local-<판>-offline.tgz`)을 옮겨 `npm install -g --offline on-munseo-local-<판>-offline.tgz` 로 깝니다. 인터넷 없이 깔리고 돕니다. 원격 묶음은 닿지 않으므로 첫 줄(`on-local`)만 붙입니다.
+**폐쇄망(업무망)** — 인터넷이 되는 곳에서 받은 「부품까지 묶은 판」(`on-munseo-local-<판>-offline.tgz`)을 옮겨 `npm install -g --offline on-munseo-local-<판>-offline.tgz` 로 깝니다. 인터넷 없이 깔리고 돕니다. 원격 묶음은 닿지 않으므로 첫 줄(`on-local`)만 붙입니다(`on-munseo-local setup`).
 
 ## 쓰는 예
 
@@ -206,6 +216,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 |---|---|---|---|
 | 공개 문서 — 법제처 별표·서식, 공공데이터 워드·엑셀·파워포인트, 공문서 양식 | 153개(한글 95·PDF 26·워드 11·엑셀 10·파워포인트 11) | 2,091번 | **2,091번** |
 | 시험용 문서·예시 문서 | 15개 | 210번 | 210번 |
+| 만들기(0.2.0) — 공문서 쓰기 30과제(짜임·원고)·표 81·예시 양식 66종 채우기·다듬기 90, 공개 문서 153개의 HWPX 바꾸기·채울 곳 찾기·서식 채우기 | 30과제 + 153개 | 628번 | **628번**(만든 한글 419개 같음) |
 | 운영 중인 원격 서버(`onmunseo.kr`, 손님)에 직접 — `on_read` | 6개(한글·옛 한글·PDF·워드·엑셀·파워포인트) | 6번 | 6번 |
 | 맥(arm64, Node 25.9) ↔ 윈도우 11(x64, Node 26.13), 이 꾸러미끼리 | 153개 | 1,013번 | 1,013번 |
 | 공개 문서 더 — 위 출처 + 부처 공개 문서(한글·PDF), 아이맥(Node 22) | 2,026개(한글 1,304·PDF 540·워드 61·엑셀 60·파워포인트 61) | 27,644번 | **27,644번** |
@@ -213,6 +224,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 - 견준 도구: 글(가림 포함)·형식·문서 정보·표(마크다운·JSON)·조각·결재점검·개인정보 찾기·가린 글·가린 한글·대비표, 그리고 붙여 넣은 글(`text`)로 주는 길. 맞은 결과는 바이트까지 같습니다. 공개 문서 153개는 운영체제 네트워크 막기(macOS sandbox-exec)와 Node 권한 모델 안에서 돌렸습니다.
 - 가린 한글 파일은 zip 압축 바이트가 기계(Node 판·CPU)에 따라 달라질 수 있습니다. 같은 기계에서는 원격 서버 꾸러미와 바이트까지 같았고(29개), 맥↔윈도우는 압축 바이트가 달라도 풀어 낸 내용(본문 XML 등)이 모두 같았습니다.
 - 그림이 너무 큰 문서처럼 입구에서 거절하는 문서는 같은 까닭 글로 거절합니다.
+- 만든 한글은 풀어서 칸마다 견줍니다. 문서 정보의 만든 시각(`CreatedDate`·`ModifiedDate`·`date`)은 만든 그때 시각이라 두 쪽을 몇 초 사이로 부르면 다를 수 있어 그 칸만 빼고 봤습니다(419개 가운데 20개가 그 칸만 다름, 나머지는 바이트까지 같음).
 - 2,026개 견주기는 Node 22(권한 모델의 네트워크 막기가 없는 판)라 macOS sandbox-exec 로 네트워크를 막고 돌렸고, 가린 한글 파일 781개가 원격 서버 꾸러미와 바이트까지 같았습니다.
 - 문서를 주지 않았을 때의 오류 글은 원격의 「문서(file_base64·file_url)」 대신 이 판의 입력 이름 「문서(file_path·file_base64)」로 나옵니다(3번 — 이것만 다르고 같음으로 셈).
 - 결과가 8MB 를 넘으면(이번 견주기 3번) 이 판은 보내지 않고 「표는 하나씩·나눠 받기」를 알립니다. AI 프로그램과 주고받는 길(표준 입출력)이 보통 10MB 에서 끊기기 때문입니다 — 원격 서버는 그대로 보냅니다.
@@ -241,12 +253,11 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 ## 알아 둘 점
 
 - **글자 인식(스캔 쪽·사진)은 없습니다.** 스캔한 PDF 쪽·그림 파일에서는 글이 나오지 않습니다. 필요하면 원격 On 문서(`https://onmunseo.kr/mcp/text`, `ocr: true` — 열쇠)를 따로 붙여 씁니다. 그때는 그 문서가 서버로 갑니다.
-- **쓰기 도구는 원격에만 있습니다.** 공문서 쓰기는 [연결하기](#연결하기)의 원격 묶음(`https://onmunseo.kr/mcp/gov`)으로, 꾸밈 없는 한글 파일 만들기·서식 채우기는 `https://onmunseo.kr/mcp/hwpx`, 글 다듬기는 `https://onmunseo.kr/mcp/tidy` 를 더 붙여 씁니다. 그때 보내는 원고·문서는 서버로 갑니다.
-- **법령(On 근거)도 원격입니다**(`https://onmunseo.kr/mcp/law`). 그 도구에 넣은 법령 이름·조문 번호·글(인용 확인)이 서버로 가며, 문서 원문을 넣지 않으면 문서는 가지 않습니다.
+- **그래프·체계도 그림·쪽 그림·PDF 는 없습니다.** 그림 부품(네이티브)이 있어야 해서입니다. `on_write_gov` 원고의 그래프·체계도는 이 판에서 그림 대신 표로 들어갑니다. 그림이 필요하면 원격 On 문서(`https://onmunseo.kr/mcp`)를 따로 붙여 씁니다 — 그때는 원고가 서버로 갑니다.
+- **법령(On 근거)은 원격입니다**(`https://onmunseo.kr/mcp/law`). 그 도구에 넣은 법령 이름·조문 번호·글(인용 확인)이 서버로 가며, 문서 원문을 넣지 않으면 문서는 가지 않습니다.
 - **보안 등급 표시(대외비 등)가 있는 문서는 처리하지 않습니다.** 이 판도 결과를 AI 에게 넘기기 때문입니다.
 - **한도는 원격 서버와 같습니다.** 문서 하나 25MB, 압축을 푼 크기·문단 하나의 글 조각 수·표 칸 수·그림 크기 한도도 같습니다. 분당 요청 한도·하루 몫은 없습니다(혼자 쓰는 컴퓨터).
 - **결과는 참고용입니다.** 결재 전에 사람이 확인해 주세요. 가린 한글은 한 글자 묶음 안에 든 값만 가리므로 결과를 다시 확인하세요(`on_find_pii`).
-- 「한글」 프로그램과 모양이 다를 수 있는 쪽 그림·PDF 는 이 판에 없습니다.
 
 ## 이용 조건·고지
 
@@ -264,11 +275,11 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 ## English summary
 
-**On Munseo — Local** (`on-munseo-local`) is an MCP server that runs entirely on your computer. It extracts text and tables from Hangul (HWP/HWPX/HML), PDF, Word, Excel and PowerPoint files, finds and masks personal information, and checks Korean official-document style — rule-based, without any language model.
+**On Munseo — Local** (`on-munseo-local`) is an MCP server that runs entirely on your computer. It reads Hangul (HWP/HWPX/HML), PDF, Word, Excel and PowerPoint files, writes Korean government-style HWPX documents (reports, plans, result reports, press releases), fills 66 example templates and HWP forms, converts documents to HWPX, checks official-document style and masks personal information — rule-based, without any language model.
 
 - **Your documents stay on your machine.** It talks to your AI app over stdio only and uses no network: no update checks, no telemetry. Our code imports no network modules (checked at build time, see `netScan` in `MANIFEST.json`). On Node 25+, it relaunches itself under the Node permission model with network, child processes and native add-ons denied, file writes limited to the output folder. Ask your AI to call `on_local_info` to verify (`blocked_by_node: true`, `network_modules_loaded: []`).
-- **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
-- **Install:** `claude mcp add -s user on-local -- npx -y on-munseo-local@latest` (Codex: `codex mcp add on-local -- npx -y on-munseo-local@latest`), or `npm install -g on-munseo-local` and run `on-munseo-local`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@latest"]`. For drafting official documents and Korean law texts, add the remote bundles alongside it: `https://onmunseo.kr/mcp/gov` and `https://onmunseo.kr/mcp/law` — only what you put into those tools is sent to the server. Pass documents as full local paths (`file_path`); save masked HWPX with `output_path`. No daily or per-minute limits.
+- **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
+- **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@latest`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@latest`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@latest"]`. Or run `npx -y on-munseo-local@latest setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
 - **What goes to your AI:** text returned by a tool enters your AI conversation (and the AI provider, if it is a cloud service). To keep originals out of the chat, use `on_mask_hwpx` (writes the masked file only), `on_find_pii` (kinds and counts) or `mask: true`.
-- **Not included:** OCR for scanned pages and the writing tools — use the remote server for those (documents are then sent to it). Documents with security classification marks are refused. Results are for reference; please review before use.
+- **Not included:** OCR for scanned pages, chart and diagram images, page images and PDF output (they need a native graphics library) — use the remote server for those (documents are then sent to it). Charts and diagrams in a drafted document become tables. Documents with security classification marks are refused. Results are for reference; please review before use.
 - **Terms:** free to use for individuals and organizations, including at work; no reverse engineering, no redistribution of modified versions, no resale — see `LICENSE.md`. Open-source components keep their own licenses (`NOTICE.md`).
