@@ -127,7 +127,7 @@
 
 | 무엇 | 값 | 다시 재는 법 |
 |---|---|---|
-| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1·0.3.0 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
+| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | 이 판(글자 인식 없이) **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 서버 판 기본 읽기는 **0.971**(아래 참고) · 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1·0.3.0 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
 | 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 654개 가운데 **653개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0). 남은 1개는 한 줄에 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — 서식 709개의 원 출처 주소·SHA-1 목록. 두 번 돌려 만든 파일 지문이 모두 같음 |
 | 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 전화번호 43.1%(65개 중 28개 — 지역번호로 시작하는 일반 전화를 이 판이 가리지 않음, 휴대전화는 가림). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.2.1`(서버 판과 같은 모델·같은 값 · 0.3.0 도 473줄 같음). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
 
