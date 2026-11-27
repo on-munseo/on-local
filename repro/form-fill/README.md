@@ -98,3 +98,7 @@ node run.mjs                   # 709개 모두(약 24MB 받기, 돌리기는 맥
 | `expected/summary.json` | 우리가 돌린 결과 요약과 만든 파일 654개의 풀린 항목 지문 |
 | `expected/docs.jsonl` | 문서마다 원본 SHA-1·갈래 수·지문(문서 글은 싣지 않음) |
 | `expected/environment.json` | 꾸러미 판·tgz SHA-256·npm integrity·Node·기계 |
+
+## 이용 조건
+
+이 폴더의 대본·기댓값은 MIT 입니다([repro/LICENSE](../LICENSE)) — 고쳐 쓰고 다시 배포해도 됩니다. 대본이 부르는 npm 꾸러미 `on-munseo-local` 은 저장소 맨 위 [LICENSE.md](../../LICENSE.md)를, 받아 쓰는 공개 자료는 각 출처의 조건을 따릅니다.

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT (repro/LICENSE — 대본만. 부르는 npm 꾸러미는 저장소 맨 위 LICENSE.md)
 // korean-pii-benchmark-v3 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)만으로 개인정보 찾기를 다시 잰다.
 //
 //   node run.mjs [--pkg on-munseo-local@0.2.1] [--data <benchmark_v3.jsonl>] [--out <폴더>]

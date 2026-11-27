@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT (repro/LICENSE — 대본만. 부르는 npm 꾸러미는 저장소 맨 위 LICENSE.md)
 // 서식 채우기 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)의 on_fields → on_fill 이
 // 「원래 서식은 그대로 두고 칸의 글만 바꾸는지」를 문서마다 잰다.
 //
@@ -260,7 +261,9 @@ let srv = null, buf = '', seq = 0, errTail = '';
 const pending = new Map();
 function start() {
   const win = process.platform === 'win32';
-  srv = spawn(win ? 'npx.cmd' : 'npx', ['-y', PKG], { stdio: ['pipe', 'pipe', 'pipe'], shell: win, env: { ...process.env, ONDOC_LOCAL_OUT: path.join(OUT, 'files') } });
+  // 읽는 곳 — 0.3.0 부터 꾸러미의 기본은 내 홈 폴더라, 받아 둔 서식(cache)·결과(out)를 홈 밖에 두어도 읽고 쓰게 두 폴더를 더한다(0.2.x 에도 같은 뜻)
+  const READ = process.env.ONDOC_LOCAL_READ || ['~', CACHE, OUT].join(path.delimiter);
+  srv = spawn(win ? 'npx.cmd' : 'npx', ['-y', PKG], { stdio: ['pipe', 'pipe', 'pipe'], shell: win, env: { ...process.env, ONDOC_LOCAL_OUT: path.join(OUT, 'files'), ONDOC_LOCAL_READ: READ } });
   buf = ''; srv.stdout.setEncoding('utf8');
   srv.stdout.on('data', (d) => {
     buf += d; let i;

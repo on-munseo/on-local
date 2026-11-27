@@ -65,3 +65,7 @@ node run.mjs --pkg on-munseo-local@<판>          # 다른 판으로 — 판이 
 | `expected/summary.json` | 우리가 낸 종류별 셈·자료와 꾸러미 판 |
 | `expected/rows.sha256` | 줄마다 찾은 자리의 지문(`<SHA-256>  <줄 번호> <원문 SHA-1>` — 문장 글은 싣지 않음) |
 | `expected/environment.json` | 꾸러미 지문(SHA-256·npm integrity)·자료 커밋·돌린 환경 |
+
+## 이용 조건
+
+이 폴더의 대본·기댓값은 MIT 입니다([repro/LICENSE](../LICENSE)) — 고쳐 쓰고 다시 배포해도 됩니다. 대본이 부르는 npm 꾸러미 `on-munseo-local` 은 저장소 맨 위 [LICENSE.md](../../LICENSE.md)를, 받아 쓰는 공개 자료는 각 출처의 조건을 따릅니다.

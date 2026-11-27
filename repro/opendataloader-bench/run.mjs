@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT (repro/LICENSE — 대본만. 부르는 npm 꾸러미는 저장소 맨 위 LICENSE.md)
 // opendataloader-bench 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)만으로 PDF 200개의 마크다운을 만든다.
 //
 //   node run.mjs <opendataloader-bench 폴더> [--pkg on-munseo-local@0.2.0] [--name on-munseo-local]
@@ -61,7 +62,9 @@ const pending = new Map();
 function start() {
   const win = process.platform === 'win32';
   // 윈도우의 npx 는 npx.cmd 라 셸로 띄운다(꾸러미 이름에는 빈칸이 없어 따옴표가 필요 없음)
-  srv = spawn(win ? 'npx.cmd' : 'npx', ['-y', PKG], { stdio: ['pipe', 'pipe', 'pipe'], shell: win, env: { ...process.env } });
+  // 읽는 곳 — 0.3.0 부터 꾸러미의 기본은 내 홈 폴더라, 벤치를 홈 밖(/tmp·다른 드라이브)에 두어도 읽게 벤치 폴더를 더한다(0.2.x 에도 같은 뜻)
+  const READ = process.env.ONDOC_LOCAL_READ || ['~', ROOT, fs.realpathSync(ROOT)].join(path.delimiter);
+  srv = spawn(win ? 'npx.cmd' : 'npx', ['-y', PKG], { stdio: ['pipe', 'pipe', 'pipe'], shell: win, env: { ...process.env, ONDOC_LOCAL_READ: READ } });
   buf = '';
   srv.stdout.setEncoding('utf8');
   srv.stdout.on('data', (d) => {
