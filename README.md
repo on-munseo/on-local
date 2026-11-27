@@ -25,7 +25,7 @@
   ```bash
   npx -y on-munseo-local@0.2.1 setup --pair
   ```
-- **판 고정** — 위 줄은 판 번호를 적어 붙입니다(`on-munseo-local@0.2.1`). 자동으로 새 판을 받지 않고, 사람이 올릴 때만 바뀝니다(npm 에 새 판이 올라와도 이미 붙인 판은 그대로 · 인터넷이 끊겨도 한 번 받은 판은 뜸). 새 판으로 올리기: 등록한 줄의 판 번호만 새 판으로 바꿔 다시 붙입니다(Claude Code 는 `claude mcp remove -s user on-local` 뒤 새 판 번호로 위 한 줄) · 바뀐 점: [CHANGELOG](https://github.com/on-munseo/on-local/blob/main/CHANGELOG.md)
+- **판 고정** — 위 「지금 쓰는 AI 도구에만」 줄은 판 번호를 적어 붙입니다(`on-munseo-local@0.2.1`). 자동으로 새 판을 받지 않고, 사람이 올릴 때만 바뀝니다(npm 에 새 판이 올라와도 이미 붙인 판은 그대로 · 인터넷이 끊겨도 한 번 받은 판은 뜸). (`setup` 은 이 판(0.2.1)까지 등록 줄에 `@latest` 를 적습니다 — 판을 고정하려면 도구별 한 줄로 붙입니다) 새 판으로 올리기: 등록한 줄의 판 번호만 새 판으로 바꿔 다시 붙입니다(Claude Code 는 `claude mcp remove -s user on-local` 뒤 새 판 번호로 위 한 줄) · 바뀐 점: [CHANGELOG](https://github.com/on-munseo/on-local/blob/main/CHANGELOG.md)
 
 **② 짝 주소(법령) — 도구에 넣은 낱말·글만 서버로.** 법령 원문·글 속 인용 확인(On 근거)은 서버에만 있습니다. 서버로 가는 것은 넣은 법령 이름·조문 번호·인용을 확인할 글이고, 파일을 보내는 도구는 없습니다. 인용을 확인할 글에 개인정보가 있으면 ① 의 `on_mask_text` 로 가린 뒤 넣습니다.
 - 지금 쓰는 도구에만(① 의 `setup --pair` 는 ② 까지 함께 붙임):
@@ -125,7 +125,7 @@
 
 | 무엇 | 값 | 다시 재는 법 |
 |---|---|---|
-| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
+| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 공식 순위표 최고 0.907 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.1`(0.2.1 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
 | 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 654개 가운데 **653개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0). 남은 1개는 한 줄에 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — 서식 709개의 원 출처 주소·SHA-1 목록. 두 번 돌려 만든 파일 지문이 모두 같음 |
 | 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 지역번호로 시작하는 일반 전화 43.1%(휴대전화는 모두 찾음). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.2.1`(서버 판과 같은 모델·같은 값). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
 
@@ -134,7 +134,7 @@
 
 **서버 판과 같은 결과.** 같은 커밋의 코드로 만들고, 같은 입력을 두 쪽에 보내 결과를 바이트까지 견줍니다(아래 [원격 On 문서와 같은 결과](#원격-on-문서와-같은-결과)).
 
-**꾸러미 확인.** 판을 고정해 붙입니다(`on-munseo-local@0.2.1`). npm 에 새 판이 올라와도 이미 붙인 판은 바뀌지 않고, 사람이 [올릴 때](#새-판으로-올리기)만 바뀝니다. 판마다 지문(SHA-256)은 [릴리스](https://github.com/on-munseo/on-local/releases)·[본 저장소 SHA256SUMS](https://github.com/on-munseo/on-munseo.github.io/blob/main/SHA256SUMS)에, 바뀐 점은 [CHANGELOG](CHANGELOG.md)에 있습니다.
+**꾸러미 확인.** 도구별 한 줄은 판을 고정해 붙입니다(`on-munseo-local@0.2.1` — `setup` 이 판 번호를 적는 것은 0.2.1 다음 판부터, 0.2.1 까지의 `setup` 은 `@latest` 를 적음). npm 에 새 판이 올라와도 이미 붙인 판은 바뀌지 않고, 사람이 [올릴 때](#새-판으로-올리기)만 바뀝니다. 판마다 지문(SHA-256)은 [릴리스](https://github.com/on-munseo/on-local/releases)·[본 저장소 SHA256SUMS](https://github.com/on-munseo/on-munseo.github.io/blob/main/SHA256SUMS)에, 바뀐 점은 [CHANGELOG](CHANGELOG.md)에 있습니다.
 
 **보안.** 우리 코드의 네트워크 부르기 0(`MANIFEST.json` 의 `netScan`) · Node 25 이상에서 네트워크·다른 프로그램 실행·네이티브 부품을 막고 띄움(`on_local_info`). 서비스 전체의 자체 보안 점검 요약(2026-11-21 전수 점검 — 높음 16건 모두 고침)은 [본 저장소 README](https://github.com/on-munseo/on-munseo.github.io#믿을-근거--남이-다시-확인할-수-있는-것)에 있습니다. 보안 문제는 공개 이슈 대신 [SECURITY.md](SECURITY.md)의 길로 알려 주세요 — 근무일 3일 안에 받았다고 답하고, 7일 안에 판단과 고칠 일정을 알립니다.
 
@@ -170,7 +170,7 @@ npx -y on-munseo-local@latest setup --update --to <옛 판>  # 옛 판으로 돌
 
 - 바꾸는 것은 등록 줄의 판 칸 하나뿐입니다. 다른 칸(환경 변수 등)과 다른 서버는 그대로이고, 등록되지 않은 도구에는 더하지 않습니다. setup 이 더한 줄이면 되돌리기 기록도 새 값으로 바꿔 `--undo` 가 계속 뺍니다.
 - 전역 설치(`on-munseo-local` 명령)로 붙였으면 설정은 그대로 두고 `npm install -g on-munseo-local@<새 판>` 으로 올립니다.
-- `setup --update` 가 없는 옛 판(0.2.1 까지)으로 붙였으면 한 번만 손으로 판 번호를 바꿉니다 — Claude Code: `claude mcp remove -s user on-local` 뒤 `claude mcp add -s user on-local -- npx -y on-munseo-local@<새 판>`. 다른 도구는 설정 파일의 `on-munseo-local@…` 칸만 고칩니다.
+- `setup --update` 가 없는 옛 판(0.2.1 까지)으로 붙였거나 그 판의 `setup` 으로 붙였으면(등록 줄이 `@latest`) 한 번만 손으로 판 번호를 바꿉니다 — Claude Code: `claude mcp remove -s user on-local` 뒤 `claude mcp add -s user on-local -- npx -y on-munseo-local@<새 판>`. 다른 도구는 설정 파일의 `on-munseo-local@…` 칸만 고칩니다.
 
 도구마다 손으로 붙이려면:
 
