@@ -1,0 +1,23 @@
+{
+  "engine_name": "on-munseo-local",
+  "engine_version": "0.3.2",
+  "processor": "Apple M5 Pro",
+  "document_count": 200,
+  "total_elapsed": 63.24,
+  "elapsed_per_doc": 0.316,
+  "date": "2026-11-28",
+  "package": "file:/Users/ttogo/On_로컬판/묶음/후보0.3.2/on-munseo-local-0.3.2.tgz",
+  "package_commit": "56ca4f36b0084c42db6ae43354c9b4eadae85777",
+  "engine": "On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051",
+  "network_blocked_by_node": true,
+  "node": "v25.9.0",
+  "platform": "darwin 25.6.0 arm64",
+  "server": {
+    "name": "on-local",
+    "title": "On 문서 — 내 PC",
+    "version": "1.0"
+  },
+  "tool": "on_read { file_path, mask: false }",
+  "failed": 0,
+  "note": "시간은 문서마다 tools/call 을 보내고 답을 받기까지(표준 입출력 주고받기 포함, 서버 띄우기 뺌)"
+}

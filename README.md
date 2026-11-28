@@ -81,7 +81,7 @@
 
 | 묶음 | 도구 | 하는 일 |
 |---|---|---|
-| On 글꺼내기 | `on_read` | 글과 표를 마크다운으로(합친 칸·표 안 표는 HTML 표). 쪽 수(한글)·문단 수·표 수 함께 |
+| On 글꺼내기 | `on_read` | 글과 표를 마크다운으로(합친 칸·표 안 표는 HTML 표). 쪽 수(한글)·문단 수·표 수 함께. 0.3.1 부터 가벼운 그림 글 읽기 포함 |
 | | `on_tables` | 표만(꾸밈 상자는 빼고, `all=true` 면 모두). `as=rows` 면 줄·칸 JSON |
 | | `on_chunks` | 제목과 개조식 갈래(Ⅰ. □ ○ - · / 제N조 등)를 path 로 남긴 검색용 조각(JSON) |
 | | `on_detect` · `on_meta` | 형식·판·압축·암호·배포용 여부 · 제목·작성자·만든 날·고친 날·쪽 수 |
@@ -97,13 +97,16 @@
 | | `on_to_hwpx` | 문서를 HWPX 로 — 예전 한글(.hwp)은 서식 그대로, PDF·워드·엑셀·파워포인트는 읽은 글·표로 다시 짬 |
 | | `on_fields` · `on_fill` | 서식(한글)의 채울 곳 찾기(누름틀·이름 칸·표 안 빈칸·괄호 빈칸·고르는 칸·날짜 자리) · 값 넣기, 고친 글을 원래 서식에 되돌려 넣기(`replace`·`cells` — 바뀐 글자만 갈아 끼우고 글자 모양 그대로) |
 | | `on_render_pages` · `on_pages` | 한글 문서(.hwp·.hwpx)의 쪽을 한글과 같은 쪽 나눔·줄바꿈으로 그린 그림(PNG) — 「1-3,5」 꼴로 한 번에 6쪽·배율 0.5~1.5 · 지정한 쪽(4쪽까지). `on_write_gov` 의 `preview`(1~2)로 만든 문서의 앞 쪽 그림을 함께 받기도 합니다 |
+| PDF 만들기 | `on_pdf` | PDF 파일 만들기 |
+| 그래프·체계도 그림 | `on_chart` · `on_diagram` | 그래프·체계도를 그림으로 만들기 |
 | On 글 다듬기 | `on_gaejo` · `on_spell` · `on_plain` | 개조식으로 · 틀린 것이 거의 확실한 맞춤법·띄어쓰기 · 쉬운 말로 |
 | 상태 | `on_local_info` | 네트워크가 막혔는지·올라온 네트워크 부품·읽는 폴더·결과 폴더·만든 판 |
 
 - 문서는 `file_path` 에 내 컴퓨터의 전체 경로로 줍니다(예: `~/문서/계획서.hwp`, `D:\문서\계획서.hwpx` — `~` 는 내 홈 폴더). 한글·빈칸이 든 경로도 됩니다. 대비표는 `a_path`·`b_path`. base64 로 싣지 않으므로 큰 문서도 대화가 무거워지지 않습니다.
 - 만든 한글(공문서·양식·표·서식 채우기·HWPX 바꾸기·가린 한글)은 `output_path`(예: `~/문서/보고서.hwpx`)에 저장합니다. 주지 않으면 결과 폴더(`~/On문서_결과`)에 둡니다. 새 파일만 만들고, 같은 이름이 있으면 덮어쓰지 않고 「(2)」를 붙입니다.
 - 쪽 그림은 네이티브 부품 없이 그립니다 — 원격 서버와 같은 그리기 코드에 Skia(CanvasKit, wasm)와 On폭 글꼴(꾸러미 안)을 씁니다. 그 컴퓨터에 한글 글꼴이 없어도 같은 그림이 나옵니다([원격과 같은 그림](#쪽-그림--원격과-같은-그림)).
-- 네이티브 그림 부품이 있어야 하는 것은 이 판에 없습니다: 그래프·체계도 그림(`on_chart`·`on_diagram` — `on_write_gov` 원고 안의 그래프·체계도는 그림 대신 표로 들어감), PDF, 도장. 이것들과 글자 인식은 원격 On 문서(`https://onmunseo.kr/mcp`)에 있습니다.
+- 0.3.1 에는 PDF 만들기(`on_pdf`)·그래프 그림(`on_chart`)·체계도 그림(`on_diagram`)과 가벼운 그림 글 읽기가 들어 있습니다. 그림 글 읽기의 범위는 [한계·알아 둘 점](#한계알아-둘-점)에 있습니다.
+- 도장은 이 판에 없습니다. 원격 On 문서(`https://onmunseo.kr/mcp`)에 있습니다.
 - 채팅에 붙여 넣은 글은 `on_check_text`·`on_find_pii`·`on_mask_text` 의 `text` 로 줍니다.
 - 개인정보 찾기에는 On 문서가 처음부터 학습한 작은 모델(꾸러미 안, CPU)도 함께 씁니다. 원격 On 문서와 같은 모델입니다.
 
@@ -333,7 +336,6 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 ## 한계·알아 둘 점
 
 - **글자 인식은 가벼운 것만 있습니다(0.3.1 부터).** PDF 의 한글 아닌 쪽 그림(문서마다 넓은 것부터 4곳)과 2쪽 이하 스캔 문서만 읽습니다(`on_local_info` 의 `text_in_images`, 끄기 `ONDOC_LOCAL_OCR=0`). 그 밖의 스캔 쪽·그림 파일에서는 글이 나오지 않습니다. 필요하면 원격 On 문서(`https://onmunseo.kr/mcp/text`, `ocr: true` — 열쇠)를 따로 붙여 씁니다. 그때는 그 문서가 서버로 갑니다.
-- **그래프·체계도 그림·PDF 는 없습니다.** 네이티브 그림 부품이 있어야 해서입니다. `on_write_gov` 원고의 그래프·체계도는 이 판에서 그림 대신 표로 들어갑니다. 그림이 필요하면 원격 On 문서(`https://onmunseo.kr/mcp`)를 따로 붙여 씁니다 — 그때는 원고가 서버로 갑니다. 쪽 그림(`on_render_pages`·`on_pages`·`preview`)은 이 판에 있습니다.
 - **쪽 그림 결과가 커지면 그림을 뒤 쪽부터 뺍니다.** AI 프로그램과 주고받는 길(표준 입출력)이 한 번에 받는 크기(보통 10MB) 안으로 맞추려는 것이며, 빼면 결과 글에 몇 장을 뺐는지 적습니다 — 쪽 범위를 줄이거나 배율(`scale`)을 낮춰 다시 부르세요.
 - **법령(On 근거)은 원격입니다**(`https://onmunseo.kr/mcp/law`). 그 도구에 넣은 법령 이름·조문 번호·글(인용 확인)이 서버로 가며, 문서 원문을 넣지 않으면 문서는 가지 않습니다.
 - **보안 등급 표시(대외비 등)가 있는 문서는 처리하지 않습니다.** 이 판도 결과를 AI 에게 넘기기 때문입니다.
@@ -365,10 +367,11 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 - **Your documents stay on your machine.** It talks to your AI app over stdio only and uses no network: no update checks, no telemetry. Our code imports no network modules (checked at build time, see `netScan` in `MANIFEST.json`). On Node 25+, it relaunches itself under the Node permission model with network, child processes and native add-ons denied, file reads limited to your home folder by default (widen with `ONDOC_LOCAL_READ` or `setup --read <folder>`, `*` for everywhere) and writes to new `.hwpx` files there and in the output folder. Ask your AI to call `on_local_info` to verify (`blocked_by_node: true`, `network_modules_loaded: []`).
 - **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
-- **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@0.3.0`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@0.3.0`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@0.3.0"]`. Or run `npx -y on-munseo-local@0.3.0 setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
-- **Pinned version:** registration lines pin the version (`on-munseo-local@0.3.0`); nothing updates by itself. To update: `npx -y on-munseo-local@latest setup --update` (changes only the version in registered entries, backs up first, `--dry-run`). Changes: [CHANGELOG](CHANGELOG.md).
+- **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@0.3.1`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@0.3.1`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@0.3.1"]`. Or run `npx -y on-munseo-local@0.3.1 setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
+- **Pinned version:** registration lines pin the version (`on-munseo-local@0.3.1`); nothing updates by itself. To update: `npx -y on-munseo-local@latest setup --update` (changes only the version in registered entries, backs up first, `--dry-run`). Changes: [CHANGELOG](CHANGELOG.md).
 - **Re-runnable numbers:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.971 (0.9707) with this npm package alone, version 0.3.1 with light OCR of text in images — the same as the remote server's default read to four decimals ([script](repro/opendataloader-bench); 0.945 without OCR up to 0.3.0); form filling on 709 public statute forms: 638 of the 655 filled files change nothing but the filled text and the placeholder text the tool announced it would replace — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
 - **What goes to your AI:** text returned by a tool enters your AI conversation (and the AI provider, if it is a cloud service). To keep originals out of the chat, use `on_mask_hwpx` (writes the masked file only), `on_find_pii` (kinds and counts) or `mask: true`.
 - **Page images** are drawn without native modules — the same drawing code as the remote server, with Skia (CanvasKit, WebAssembly) and the bundled OnPok fonts; across 238 pages compared with the remote server's renderer the mean pixel difference was at most 0.6/255 and no glyph was missing.
-- **Not included:** OCR for scanned pages, chart and diagram images and PDF output (they need a native graphics library) — use the remote server for those (documents are then sent to it). Charts and diagrams in a drafted document become tables. Documents with security classification marks are refused. Landline numbers with area codes are not masked (phone-number recall 43.1%, 28 of 65, in the public 473-line test; mobile numbers are masked). Results are for reference; please review before use.
+- **Included in 0.3.1:** PDF output (`on_pdf`), chart images (`on_chart`), diagram images (`on_diagram`) and light OCR of text in images. Light OCR reads non-Korean page images in PDFs (up to four regions per document, largest first) and scanned documents of up to two pages. Other scanned pages and standalone image files are not read; see [limitations](#한계알아-둘-점).
+- **Limitations:** Documents with security classification marks are refused. Landline numbers with area codes are not masked (phone-number recall 43.1%, 28 of 65, in the public 473-line test; mobile numbers are masked). Results are for reference; please review before use.
 - **Terms:** free to use for individuals and organizations, including at work; no reverse engineering, no redistribution of modified versions, no resale — see `LICENSE.md`. Open-source components keep their own licenses (`NOTICE.md`).
