@@ -127,11 +127,11 @@
 
 | 무엇 | 값 | 다시 재는 법 |
 |---|---|---|
-| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | 이 판(글자 인식 없이) **0.945**(읽는 순서 0.949 · 표 0.938 · 제목 0.938) — 서버 판 기본 읽기는 **0.971**(아래 참고) | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.2.0`(0.2.1·0.3.0 도 결과가 바이트까지 같음). 결과 200개 지문이 다섯 번 모두 같음 |
-| 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 654개 가운데 **653개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0). 남은 1개는 한 줄에 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — 서식 709개의 원 출처 주소·SHA-1 목록. 두 번 돌려 만든 파일 지문이 모두 같음 |
-| 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 전화번호 43.1%(65개 중 28개 — 지역번호로 시작하는 일반 전화를 이 판이 가리지 않음, 휴대전화는 가림). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.2.1`(서버 판과 같은 모델·같은 값 · 0.3.0 도 473줄 같음). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
+| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | 내 PC 판 0.3.1 — 그림 속 글을 가볍게 글자 인식해 **0.971**(0.9707 · 읽는 순서 0.972 · 표 0.980 · 제목 0.959). 서버 판 기본 읽기 값과 네 자리까지 같음 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.3.1`. 결과 200개 지문이 두 번 모두 같음. 글자 인식이 없던 0.2.0~0.3.0 은 0.945 |
+| 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 655개 가운데 **638개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0 — 도구가 미리 알린 자리 표시 글을 값으로 갈아 끼운 24칸은 따로 셈). 남은 17개 가운데 14개는 「처리기간」 칸에 그 문단에 없던 글자 모양으로 값을 넣은 것, 1개는 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — `on-munseo-local@0.3.1` · 서식 709개의 원 출처 주소·SHA-1 목록. 다섯 번 돌려 만든 파일 지문이 모두 같음. 0.2.0 은 654개 중 653개 |
+| 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 전화번호 43.1%(65개 중 28개 — 지역번호로 시작하는 일반 전화를 이 판이 가리지 않음, 휴대전화는 가림). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.3.1`(서버 판과 같은 모델·같은 값 · 0.2.1·0.3.0 도 473줄 같음). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
 
-- 이 판은 글자 인식이 없어 영어 PDF 값은 「글자 인식 없이」 값입니다. 서버 판(원격 On 문서)의 0.971·0.970 은 서버의 글자 인식 모델을 써서 이 대본으로는 재현되지 않습니다.
+- 영어 PDF 값은 0.3.1 부터 그림 속 글을 가볍게 글자 인식한 값이라, 서버 판(원격 On 문서) 기본 읽기 0.971 을 이 꾸러미로 누구나 다시 낼 수 있습니다. 서버 판의 정밀 읽기 0.970 은 서버에만 있어 이 대본으로는 재현되지 않습니다.
 - 바탕 읽기 규칙은 이 벤치 200개를 보며 다듬었습니다. 그 밖의 숫자는 대본을 공개하지 않은 자체 측정이고, 정의는 [측정 자료](https://github.com/on-munseo/on-munseo.github.io/blob/main/docs/benchmark.md)에 있습니다.
 
 **서버 판과 같은 결과.** 같은 커밋의 코드로 만들고, 같은 입력을 두 쪽에 보내 결과를 바이트까지 견줍니다(아래 [원격 On 문서와 같은 결과](#원격-on-문서와-같은-결과)).
@@ -332,7 +332,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 ## 한계·알아 둘 점
 
-- **글자 인식(스캔 쪽·사진)은 없습니다.** 스캔한 PDF 쪽·그림 파일에서는 글이 나오지 않습니다. 필요하면 원격 On 문서(`https://onmunseo.kr/mcp/text`, `ocr: true` — 열쇠)를 따로 붙여 씁니다. 그때는 그 문서가 서버로 갑니다.
+- **글자 인식은 가벼운 것만 있습니다(0.3.1 부터).** PDF 의 한글 아닌 쪽 그림(문서마다 넓은 것부터 4곳)과 2쪽 이하 스캔 문서만 읽습니다(`on_local_info` 의 `text_in_images`, 끄기 `ONDOC_LOCAL_OCR=0`). 그 밖의 스캔 쪽·그림 파일에서는 글이 나오지 않습니다. 필요하면 원격 On 문서(`https://onmunseo.kr/mcp/text`, `ocr: true` — 열쇠)를 따로 붙여 씁니다. 그때는 그 문서가 서버로 갑니다.
 - **그래프·체계도 그림·PDF 는 없습니다.** 네이티브 그림 부품이 있어야 해서입니다. `on_write_gov` 원고의 그래프·체계도는 이 판에서 그림 대신 표로 들어갑니다. 그림이 필요하면 원격 On 문서(`https://onmunseo.kr/mcp`)를 따로 붙여 씁니다 — 그때는 원고가 서버로 갑니다. 쪽 그림(`on_render_pages`·`on_pages`·`preview`)은 이 판에 있습니다.
 - **쪽 그림 결과가 커지면 그림을 뒤 쪽부터 뺍니다.** AI 프로그램과 주고받는 길(표준 입출력)이 한 번에 받는 크기(보통 10MB) 안으로 맞추려는 것이며, 빼면 결과 글에 몇 장을 뺐는지 적습니다 — 쪽 범위를 줄이거나 배율(`scale`)을 낮춰 다시 부르세요.
 - **법령(On 근거)은 원격입니다**(`https://onmunseo.kr/mcp/law`). 그 도구에 넣은 법령 이름·조문 번호·글(인용 확인)이 서버로 가며, 문서 원문을 넣지 않으면 문서는 가지 않습니다.
@@ -357,7 +357,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 ## 측정과 비교(참고)
 
-- 영어 PDF 벤치(opendataloader-bench)의 공식 순위표: 순위표에 오른 값 가운데 가장 높은 것은 0.907 입니다. 순위표 값은 순위표가 밝힌 값이고, 이 판의 0.945 와 서버 판의 0.971 은 같은 공식 채점기로 우리가 잰 값입니다. On 문서는 이 순위표에 올라가 있지 않습니다 — 순위표 저장소에 외부 엔진 결과를 더하는 요청 7건(2026-06~11)이 아직 병합되지 않았고, 순위표는 2026-04-30 뒤로 바뀌지 않았습니다. 그래서 등재 대신 재현 대본([믿을 근거](#믿을-근거--남이-다시-확인할-수-있는-것))을 둡니다.
+- 영어 PDF 벤치(opendataloader-bench)의 공식 순위표: 순위표에 오른 값 가운데 가장 높은 것은 0.907 입니다. 순위표 값은 순위표가 밝힌 값이고, 이 판(0.3.1)과 서버 판 기본 읽기의 0.971 은 같은 공식 채점기로 우리가 잰 값입니다. On 문서는 이 순위표에 올라가 있지 않습니다 — 순위표 저장소에 외부 엔진 결과를 더하는 요청 7건(2026-06~11)이 아직 병합되지 않았고, 순위표는 2026-04-30 뒤로 바뀌지 않았습니다. 그래서 등재 대신 재현 대본([믿을 근거](#믿을-근거--남이-다시-확인할-수-있는-것))을 둡니다.
 
 ## English summary
 
@@ -367,7 +367,7 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 - **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
 - **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@0.3.0`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@0.3.0`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@0.3.0"]`. Or run `npx -y on-munseo-local@0.3.0 setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
 - **Pinned version:** registration lines pin the version (`on-munseo-local@0.3.0`); nothing updates by itself. To update: `npx -y on-munseo-local@latest setup --update` (changes only the version in registered entries, backs up first, `--dry-run`). Changes: [CHANGELOG](CHANGELOG.md).
-- **Re-runnable numbers:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.945 with this npm package alone (no OCR) — [script](repro/opendataloader-bench); form filling on 709 public statute forms: 653 of the 654 filled files keep the original form byte-for-byte outside the filled text — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
+- **Re-runnable numbers:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.971 (0.9707) with this npm package alone, version 0.3.1 with light OCR of text in images — the same as the remote server's default read to four decimals ([script](repro/opendataloader-bench); 0.945 without OCR up to 0.3.0); form filling on 709 public statute forms: 638 of the 655 filled files change nothing but the filled text and the placeholder text the tool announced it would replace — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
 - **What goes to your AI:** text returned by a tool enters your AI conversation (and the AI provider, if it is a cloud service). To keep originals out of the chat, use `on_mask_hwpx` (writes the masked file only), `on_find_pii` (kinds and counts) or `mask: true`.
 - **Page images** are drawn without native modules — the same drawing code as the remote server, with Skia (CanvasKit, WebAssembly) and the bundled OnPok fonts; across 238 pages compared with the remote server's renderer the mean pixel difference was at most 0.6/255 and no glyph was missing.
 - **Not included:** OCR for scanned pages, chart and diagram images and PDF output (they need a native graphics library) — use the remote server for those (documents are then sent to it). Charts and diagrams in a drafted document become tables. Documents with security classification marks are refused. Landline numbers with area codes are not masked (phone-number recall 43.1%, 28 of 65, in the public 473-line test; mobile numbers are masked). Results are for reference; please review before use.

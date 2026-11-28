@@ -3,7 +3,7 @@
 // 서식 채우기 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)의 on_fields → on_fill 이
 // 「원래 서식은 그대로 두고 칸의 글만 바꾸는지」를 문서마다 잰다.
 //
-//   node run.mjs [--sources sources.json] [--cache cache] [--out out] [--pkg on-munseo-local@0.2.0]
+//   node run.mjs [--sources sources.json] [--cache cache] [--out out] [--pkg on-munseo-local@0.3.1]
 //   node run.mjs --files <문서 목록.txt>        (내 PC 의 문서 목록으로 — 한 줄에 경로 하나)
 //
 // · 다른 꾸러미를 쓰지 않는다(Node 20 이상). zip 풀기는 Node 안의 zlib 로 직접 한다.
@@ -17,13 +17,17 @@
 //   4. 견주기
 //      ① zip: 항목 이름·차례·압축 방식이 같은지, 본문(Contents/section*.xml) 밖 항목(header.xml 의 글꼴·문단·표 모양,
 //         그림 BinData, settings, 미리보기 등)이 바이트까지 같은지
-//      ② 본문 XML: 토막(태그·글) 단위로 차이를 구해 갈래를 나눈다. 허락하는 갈래는 넷뿐이다
+//      ② 본문 XML: 토막(태그·글) 단위로 차이를 구해 갈래를 나눈다. 허락하는 갈래는 여섯뿐이다(뒤의 둘은 0.3.x 의 채우기 방식)
 //         · 글 넣기 — 이미 있는 <hp:t> 안에 값을 넣음, 빈 <hp:t/>·빈 <hp:run/> 에 값을 넣음, 빈자리 글(「성명      (인)」·「소속:」·「년 월 일」)의 빈칸 일부를 값으로
 //         · 새 문단 — 「칸 안 다음 줄」(이름 칸 아래 줄)에 값을 넣으려고 <hp:p><hp:run><hp:t>값</hp:t></hp:run></hp:p> 하나를 더함(문단·글자 모양 번호는 header.xml 에 있는 것)
 //         · 고르는 칸 — [ ] → [√], □ → ■
 //         · 줄 자리 기억 지움 — 값을 넣은 문단과 그 문단을 품은 문단의 <hp:linesegarray>(한글이 열 때 다시 계산하는 줄 자리 기억)만
+//         · 같은 문단에 값 덩이 — 칸 이름 글 뒤에 <hp:run charPrIDRef="N"><hp:t>값</hp:t></hp:run> 을 더함. N 은 그 문단에 이미 있던 덩이의 글자 모양 번호만
+//           (글 덩이가 하나도 없던 빈 문단은 새 문단처럼 header.xml 의 번호)
+//         · 자리 표시 갈아 끼움 — on_fields 가 그 칸의 자리 표시 글(guide — 「○○○」·「OOO (인)」·「제 호」 등)을 알리고
+//           on_fill 이 「자리 표시 글 대신」 넣었다고 한 칸만. 빠져도 되는 글자는 그 자리 표시 글의 글자 몫 안뿐이다
 //         그 밖의 차이(태그·속성이 바뀜, 글이 빠짐)는 모두 「그 밖」으로 세고 실패로 본다.
-//      ③ 글자 셈(XML): 본문에서 빠진 글자 0, 더해진 글자 = 넣은 값의 글자(빈칸 빼고)와 정확히 같음
+//      ③ 글자 셈(XML): 본문에서 빠진 글자 0(알린 자리 표시 글자는 guide_chars 로 따로 셈), 더해진 글자 = 넣은 값의 글자(빈칸 빼고)와 정확히 같음
 //      ④ 다시 열기: 만든 파일을 같은 꾸러미 on_read 로 다시 읽어 넣은 값이 보이는지, 원본(on_read)과 견주어 글자·숫자가 하나도 안 빠졌는지
 // · 결과: <--out>/result.json(문서마다 지문·개수·갈래 — 문서 내용은 싣지 않음), <--out>/files/(만든 HWPX — 직접 열어 보기용)
 // · 이 대본 옆 expected/summary.json 이 있으면 끝에 맞대 본다(같은 꾸러미 판으로 우리가 돌린 값)
@@ -38,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i < 0 ? d : argv[i + 1]; };
-const PKG = opt('pkg', 'on-munseo-local@0.2.0');
+const PKG = opt('pkg', 'on-munseo-local@0.3.1');
 const OUT = path.resolve(opt('out', path.join(HERE, 'out')));
 const FILES = opt('files', null);
 const SOURCES = path.resolve(opt('sources', path.join(HERE, 'sources.json')));
@@ -117,10 +121,21 @@ function paraChains(tk) {
   return chain;
 }
 // 본문 하나를 견준다 — 갈래별 수와 글자 셈
-function compareSection(aXml, bXml, values, checksOn) {
+//   guides: 도구가 「자리 표시 글 대신」 넣었다고 알린 칸의 자리 표시 글(on_fields 의 guide) — 이 글자만 빠져도 된다
+//   charIds: header.xml 에 있는 글자 모양 번호(Set) — 새 문단·빈 문단의 값 덩이는 이 번호만 허락(주지 않으면 이 검사는 건너뜀)
+function compareSection(aXml, bXml, values, checksOn, guides = [], charIds = null) {
   const A = tokens(aXml), B = tokens(bXml), ops = diff(A, B), chA = paraChains(A), chB = paraChains(B);
   const map = new Map(); for (const [o, i, j] of ops) if (o === '=') map.set(i, j);   // A 토막 → B 토막
-  const cat = { text_insert: 0, new_para: 0, check: 0, lineseg_removed: 0, other: 0 }, other = [];
+  const cat = { text_insert: 0, new_para: 0, run_add: 0, guide_replace: 0, check: 0, lineseg_removed: 0, other: 0 }, other = [];
+  // 자리 표시 글마다 따로 쓰고 깎는 글자 몫 — 덩이의 옛 글이 그 자리 표시 글과 이어질 때(한쪽이 다른 쪽 안에 듦)만 그 몫을 쓴다
+  const gList = guides.map((g) => ({ g: g.replace(/\s+/g, ''), left: bag(g), free: bag(g) })).filter((x) => x.g);
+  const replaced = [];                  // 갈아 끼운 덩이의 옛 글 가운데 그 자리 표시 글의 글자 — 글자 셈(ledger)은 이 몫 안에서만 빠짐을 봐 준다
+  const rmap = new Map(); for (const [i, j] of map) rmap.set(j, i);   // B 토막 → A 토막
+  const valuesNs = values.map((v) => String(v.value).replace(/\s+/g, '')).filter(Boolean);
+  // B 쪽 문단(가장 안쪽 hp:p) P 의 글(빈칸 뺌)에 넣은 값이 하나라도 들었나 — 자리 표시 갈아 끼움은 값이 들어간 문단에서만
+  const paraHasValue = (P) => { if (P == null) return false; let t = ''; for (let q = 0; q < B.length; q++) if ((chB[q] || []).at(-1) === P && !isTag(B[q])) t += unesc(B[q]); t = t.replace(/\s+/g, ''); return valuesNs.some((v) => t.includes(v)); };
+  const charOk = (str) => !charIds || [...str.matchAll(/charPrIDRef="(\d+)"/g)].every((m) => charIds.has(m[1]));
+  const valueChars = new Set([...values.map((v) => String(v.value)).join('')].filter((c) => !/\s/.test(c)));
   const touchedB = new Set();   // 값을 넣은 B 쪽 문단(hp:p 시작 번호)과 그 조상
   const linesegA = [];          // 지운 줄 자리 기억 — 품은 A 쪽 문단 번호
   let i = 0;
@@ -142,11 +157,20 @@ function compareSection(aXml, bXml, values, checksOn) {
     const dTags = dT.filter(isTag), aTags = aT.filter(isTag), dText = dT.filter((t) => !isTag(t)).map(unesc).join(''), aText = aT.filter((t) => !isTag(t)).map(unesc).join('');
     const mark = (k) => { for (const p of chB[k] || []) touchedB.add(p); };
     let ok = false, kind = null;
-    if (!dTags.length && !aTags.length) { ok = true; kind = aText && dText ? 'replace' : 'text_insert'; }
+    if (!dTags.length && !aTags.length) { ok = true; kind = dText.replace(/\s+/g, '') ? 'replace' : 'text_insert'; }   // 글이 빠지기만 한 덩이도 replace 로 보아 아래에서 따진다
     else if (!dTags.length && aTags.every((t) => /^<hp:p\s[^>]*>$|^<hp:run\s[^>]*>$|^<hp:t>$|^<\/hp:t>$|^<\/hp:run>$|^<\/hp:p>$/.test(t))) {
       const s = aT.join('');
-      if (/^(?:<hp:p\s[^>]*><hp:run\s[^>]*><hp:t>[^<]*<\/hp:t><\/hp:run><\/hp:p>)+$/.test(s)) { ok = true; kind = 'new_para'; }
+      if (/^(?:<hp:p\s[^>]*><hp:run\s[^>]*><hp:t>[^<]*<\/hp:t><\/hp:run><\/hp:p>)+$/.test(s) && charOk(s)) { ok = true; kind = 'new_para'; }
       else if (/^<hp:t>[^<]*<\/hp:t>$/.test(s.replace(/^[^<]*/, '')) || /^<hp:t>[^<]*<\/hp:t>$/.test(s)) { ok = true; kind = 'text_insert'; }
+      // 같은 문단에 값 덩이 — 칸 이름 글 뒤(또는 글 덩이를 둘로 나눈 사이)에 <hp:run charPrIDRef="N"><hp:t>값</hp:t></hp:run> 을 더함.
+      //   글자 모양 번호 N 은 그 문단에 이미 있던 덩이의 것만 허락(새 글자 모양을 쓰지 않음). 덩이에 다른 속성이 붙으면 「그 밖」
+      //   글 덩이가 하나도 없던 빈 문단(줄 자리 기억만 있던 문단)은 견줄 덩이가 없어 「새 문단」처럼 header.xml 의 글자 모양 번호를 쓴다
+      else if (/^(?:<hp:run charPrIDRef="\d+"><hp:t>[^<]*<\/hp:t><\/hp:run>)+$/.test(s) || /^<\/hp:t><\/hp:run>(?:<hp:run charPrIDRef="\d+"><hp:t>[^<]*<\/hp:t><\/hp:run>)+<hp:run charPrIDRef="\d+"><hp:t>$/.test(s)) {
+        // 글자 모양 번호는 원본(A)의 같은 문단에서 모은다 — 다른 곳에서 새로 더한 덩이가 서로를 정당화하지 않게
+        const P = (chB[add[0]] || []).at(-1), Pa = P == null ? undefined : rmap.get(P), have = new Set();
+        if (Pa != null) for (let t = 0; t < A.length; t++) if ((chA[t] || []).at(-1) === Pa) { const m = /^<hp:run charPrIDRef="(\d+)"/.exec(A[t]); if (m) have.add(m[1]); }
+        if (Pa != null && (have.size === 0 ? /^<hp:run /.test(s) && charOk(s) : [...s.matchAll(/<hp:run charPrIDRef="(\d+)">/g)].every((m) => have.has(m[1])))) { ok = true; kind = 'run_add'; }
+      }
     } else if (dTags.length === 1 && dTags[0] === '<hp:t/>' && aTags.join('') === '<hp:t></hp:t>') { ok = true; kind = 'text_insert'; }
     else if (dTags.length === 1 && /^<hp:run\s[^>]*\/>$/.test(dTags[0]) && aTags.length === 4 && aTags[0] === dTags[0].replace(/\/>$/, '>') && aTags.slice(1).join('') === '<hp:t></hp:t></hp:run>') { ok = true; kind = 'text_insert'; }
     if (ok) {
@@ -158,7 +182,27 @@ function compareSection(aXml, bXml, values, checksOn) {
         // 고르는 칸 — 기호 하나만 바뀜([ ] → [√] 또는 □ → ■), 나머지 글은 빈칸까지 그대로
         const oneSwap = (() => { for (const [a1, b1] of [['[ ]', '[√]'], ['[]', '[√]'], ['□', '■'], ['☐', '☑'], ['☐', '☒']]) { let k = dText.indexOf(a1); while (k >= 0) { if (dText.slice(0, k) + b1 + dText.slice(k + a1.length) === aText) return true; k = dText.indexOf(a1, k + 1); } } return false; })();
         if (checksOn && oneSwap) cat.check++;
-        else { let p = 0; for (const c of newNs) if (p < oldNs.length && c === oldNs[p]) p++; if (p === oldNs.length) cat.text_insert++; else { cat.other++; other.push('글이 바뀜(옛 글이 새 글 안에 차례대로 남지 않음)'); } }
+        else {
+          // 옛 글 가운데 새 글 안에 차례대로 남지 않은 글자(가장 긴 공통 차례 밖) — 고르는 칸 기호 하나를 바꿔 보고 가장 적은 쪽
+          let left = subseq(oldNs, newNs) ? [] : lcsLeft(oldNs, newNs), swapped = false;
+          if (checksOn && left.length) for (const [a1, b1] of [['[ ]', '[√]'], ['[]', '[√]'], ['□', '■'], ['☐', '☑'], ['☐', '☒']]) { let k = dText.indexOf(a1); while (k >= 0) { const l2 = lcsLeft((dText.slice(0, k) + b1 + dText.slice(k + a1.length)).replace(/\s+/g, ''), newNs); if (l2.length < left.length) { left = l2; swapped = true; } k = dText.indexOf(a1, k + 1); } }
+          if (swapped) cat.check++;
+          // 자리 표시 — 옛 글이 도구가 알린 자리 표시 글과 이어지고(한쪽이 다른 쪽 안에 듦) 남지 않은 글자가 모두 그 글의 글자 몫 안일 때만(몫은 깎아 씀)
+          // 덩이가 든 B 문단 — 더한 토막이 있으면 그 자리, 빠지기만 했으면 옆 토막이 옮겨 간 자리
+          const PB = add.length ? (chB[add[0]] || []).at(-1) : (() => { for (const k of rest) { const jj = map.get(k - 1) ?? map.get(k + 1); if (jj != null) return (chB[jj] || []).at(-1); } return null; })();
+          const lb = bag(left.join('')), gx = oldNs && paraHasValue(PB) && gList.find((x) => (x.g.includes(oldNs) || oldNs.includes(x.g)) && [...lb].every(([c, n]) => (x.left.get(c) || 0) >= n));
+          if (gx) {
+            for (const c of left) gx.left.set(c, gx.left.get(c) - 1);
+            // 값에도 같은 글자(「○」)가 있으면 차례 맞추기가 자리 표시 글자를 값 글자로 짝지을 수 있어(「○○○」 → 「○○구 ○○로 12」는 차례대로 남은 것처럼 보임),
+            //   남지 않은 글자만이 아니라 옛 글 속 자리 표시 글자를 몫으로 — 값에 없는 글자는 이 덩이에서 실제로 줄어든 만큼만
+            //   (「OOO  (인)」 → 「홍길동  (인)」 의 「(인)」은 남았으므로 몫에 넣지 않음)
+            const nb = bag(newNs);
+            for (const [c, n] of bag(oldNs)) { const k = Math.min(valueChars.has(c) ? n : Math.max(0, n - (nb.get(c) || 0)), gx.free.get(c) || 0); if (k) { gx.free.set(c, gx.free.get(c) - k); for (let q = 0; q < k; q++) replaced.push(c); } }
+          }
+          if (!left.length) cat.text_insert++;
+          else if (gx) cat.guide_replace++;
+          else { cat.other++; other.push('글이 바뀜(옛 글이 새 글 안에 차례대로 남지 않음)'); }
+        }
       } else cat[kind]++;
     } else { cat.other++; other.push(`태그 바뀜 -[${dTags.map((t) => t.split(/[\s>/]/)[0].slice(1) || t.slice(0, 12)).join(',')}] +[${aTags.map((t) => t.split(/[\s>/]/)[0].slice(1) || t.slice(0, 12)).join(',')}]`); for (const k of add) mark(k); }
     i = j;
@@ -168,26 +212,47 @@ function compareSection(aXml, bXml, values, checksOn) {
   for (const pa of linesegA) { const pb = pa == null ? null : map.get(pa); if (pb == null || !touchedB.has(pb)) linesegElsewhere++; }
   // 글자 셈(XML 글 토막 전체, 빈칸 뺌) — ledger() 가 빠진 글자·값 말고 더해진 글자·안 들어간 값 글자를 따로 센다
   const textOf = (tk) => tk.filter((t) => !isTag(t)).map(unesc).join('');
-  const L = ledger(textOf(A), textOf(B), values, checksOn, bag);
-  return { tokensA: A.length, tokensB: B.length, cat, other, lineseg_elsewhere: linesegElsewhere, ...L };
+  const L = ledger(textOf(A), textOf(B), values, checksOn, bag, replaced.join(''));
+  return { tokensA: A.length, tokensB: B.length, cat, other, lineseg_elsewhere: linesegElsewhere, replaced: replaced.join(''), ...L };
+}
+// o 의 글자 가운데 n 과의 가장 긴 공통 차례(LCS)에 들지 않는 글자들
+const subseq = (o, n) => { let p = 0; for (const c of n) if (p < o.length && c === o[p]) p++; return p === o.length; };   // o 가 n 안에 차례대로 남았나
+function lcsLeft(o, n) {
+  const a = [...o], b = [...n];
+  if (a.length * b.length > 4e6) return a;   // 너무 긴 토막은 표를 만들지 않고 엄격하게(모두 남지 않은 것으로) — 메모리 보호
+  const L = Array.from({ length: a.length + 1 }, () => new Int32Array(b.length + 1));
+  for (let i = a.length - 1; i >= 0; i--) for (let j = b.length - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1]);
+  const left = []; let i = 0, j = 0;
+  while (i < a.length) { if (j < b.length && a[i] === b[j]) { i++; j++; } else if (j < b.length && L[i][j + 1] >= L[i + 1][j]) j++; else left.push(a[i++]); }
+  return left;
 }
 // 글자 수지 — before·after 글, 넣은 값 [{ value, kind }], 고르는 칸을 켰는지, 셈 함수(bag: 빈칸 뺀 모든 글자 · bagLN: 글자·숫자만)
 //   lost: before 에 있었는데 after 에 없는 글자(진짜 빠짐) · extra: 값 말고 더해진 글자 · missing: 값 가운데 안 들어간 글자
 //   날짜 칸(kind date)은 서식의 「년·월·일」 글자를 그대로 두고 숫자만 넣으므로, 값의 「년·월·일」이 서식에 이미 있으면 다시 넣은 것으로 치지 않는다(reused)
 //   고르는 칸 기호(□■☐☑☒√)는 셈에서 빼고, 기호가 하나씩만 바뀌었는지는 본문 덩이 견주기(check)가 본다
-function ledger(before, after, values, checksOn, count) {
+//   guides: 본문 견주기가 「자리 표시 갈아 끼움」으로 본 덩이에서 실제로 빠진 글자 — 그 글자는 글자마다 몫 안에서 「갈아 끼워 빠진 것」으로 본다(guide_chars).
+//   몫을 얼마나 쓸지는 글자마다 빠짐·더함·안 들어감의 합이 가장 적은 쪽으로 정한다(값에도 같은 글자 「○」가 있을 수 있어서). 몫 밖의 빠짐은 그대로 lost
+function ledger(before, after, values, checksOn, count, guides = '') {
   const CK = /[□■☐☑☒√]/u;
   const strip = (m) => { if (checksOn) for (const c of [...m.keys()]) if (CK.test(c)) m.delete(c); return m; };
   const bA = strip(count(before)), bB = strip(count(after));
   const pos = (m) => [...m].filter(([, n]) => n > 0);
-  const lostM = pos(bagSub(bA, bB)), gained = new Map(pos(bagSub(bB, bA)));
   const want = new Map(); let dates = 0;
   for (const v of values) { if (v.kind === 'date') dates++; for (const [c, n] of strip(count(String(v.value)))) want.set(c, (want.get(c) || 0) + n); }
+  let guideChars = 0;
+  for (const [c, g] of strip(count(guides))) {
+    const a0 = bA.get(c) || 0, b0 = bB.get(c) || 0, w = want.get(c) || 0; let best = 0, bestCost = Infinity;
+    for (let r = 0; r <= Math.min(g, a0); r++) { const a1 = a0 - r, cost = Math.max(0, a1 - b0) + Math.abs(Math.max(0, b0 - a1) - w); if (cost < bestCost) { bestCost = cost; best = r; } }
+    if (best) { bA.set(c, a0 - best); guideChars += best; }
+  }
+  const lostM = pos(bagSub(bA, bB)), gained = new Map(pos(bagSub(bB, bA)));
   let reused = 0;
-  if (dates) for (const c of '년월일') { const w = want.get(c) || 0, g = gained.get(c) || 0, have = bA.get(c) || 0; const k = Math.min(Math.max(0, w - g), have, dates); if (k) { want.set(c, w - k); reused += k; } }
+  // 날짜 칸은 서식의 「20  년」처럼 이미 있는 해 앞 두 자리 「20」도 살려 쓴다 — 날짜 값 수만큼만
+  const n20 = (String(before).match(/20(?=\s*년)/g) || []).length;   // 「20  년」 꼴의 「20」 수
+  if (dates) for (const c of '년월일20') { const w = want.get(c) || 0, g = gained.get(c) || 0, have = /[20]/.test(c) ? Math.min(n20, bA.get(c) || 0) : bA.get(c) || 0; const k = Math.min(Math.max(0, w - g), have, dates); if (k) { want.set(c, w - k); reused += k; } }
   const extraM = pos(bagSub(gained, want)), missM = pos(bagSub(want, gained));
   const sumN = (xs) => xs.reduce((s, [, n]) => s + n, 0);
-  return { lost: sumN(lostM), extra: sumN(extraM), missing: sumN(missM), reused_date_marks: reused };
+  return { lost: sumN(lostM), extra: sumN(extraM), missing: sumN(missM), reused_date_marks: reused, guide_chars: guideChars };
 }
 
 /* ── 스스로 시험(--selftest) — 견주기가 헐겁지 않은지: 허락한 바뀜은 통과, 그 밖은 잡아야 한다 ── */
@@ -212,11 +277,40 @@ if (argv.includes('--selftest')) {
   const dateCases = [
     ['날짜 칸 — 「년·월·일」 두고 숫자만', dBase.replace('    년    월    일    ', '2026년 11월 27일    '), (r) => r.cat.other === 0 && r.lost === 0 && r.extra === 0 && r.missing === 0],
     ['날짜 칸 — 「년·월·일」을 지우고 다른 꼴로 덮음', dBase.replace('    년    월    일    ', '2026. 11. 27.'), (r) => r.lost > 0 || r.cat.other > 0],
+    ['날짜 칸 — 값의 숫자가 덜 들어감(「26년 11월 27일」)', dBase.replace('    년    월    일    ', '26년 11월 27일    '), (r) => r.missing > 0],
   ];
+  // 「20  년」 꼴 — 서식의 「20」을 살려 「2026년」으로 넣으면 통과
+  const d20 = '<hs:sec><hp:p id="6" paraPrIDRef="4"><hp:run charPrIDRef="5"><hp:t>20    년    월    일</hp:t></hp:run></hp:p></hs:sec>';
+  dateCases.push(['날짜 칸 — 서식의 「20  년」을 살려 「2026년」', d20.replace('20    년    월    일', '2026년 11월 27일'), (r) => r.cat.other === 0 && r.lost === 0 && r.extra === 0 && r.missing === 0, d20]);
   let bad = 0;
-  for (const [name, xml, ok] of dateCases) { const r = compareSection(dBase, xml, dv, false); const pass = ok(r); if (!pass) bad++; console.log(`${pass ? '맞음' : '틀림'} — ${name} · ${JSON.stringify({ cat: r.cat, lost: r.lost, extra: r.extra, missing: r.missing })}`); }
+  for (const [name, xml, ok, b0] of dateCases) { const r = compareSection(b0 || dBase, xml, dv, false); const pass = ok(r); if (!pass) bad++; console.log(`${pass ? '맞음' : '틀림'} — ${name} · ${JSON.stringify({ cat: r.cat, lost: r.lost, extra: r.extra, missing: r.missing })}`); }
   for (const [name, xml, ok] of cases) { const r = compareSection(base, xml, [{ value: '홍길동', kind: 'cell' }], true); const pass = ok(r); if (!pass) bad++; console.log(`${pass ? '맞음' : '틀림'} — ${name} · ${JSON.stringify({ cat: r.cat, lost: r.lost, extra: r.extra, lineseg_elsewhere: r.lineseg_elsewhere })}`); }
-  console.log(bad ? `스스로 시험 ${cases.length + dateCases.length}개 중 ${bad}개 틀림` : `스스로 시험 ${cases.length + dateCases.length}개 모두 맞음`);
+  // 0.3.x 의 새 채우기 둘 — 같은 문단에 값 덩이(그 문단에 있던 글자 모양만), 도구가 알린 자리 표시 글 갈아 끼우기(그 글자만 빠져도 됨)
+  const gBase = '<hs:sec><hp:p id="7" paraPrIDRef="1"><hp:run charPrIDRef="3"><hp:t>성명 ○○○ (인)</hp:t></hp:run></hp:p></hs:sec>';
+  const v1 = [{ value: '홍길동', kind: 'cell' }];
+  const newCases = [
+    ['같은 문단에 값 덩이(그 문단에 있던 글자 모양 번호)', base, base.replace('<hp:t>성명</hp:t></hp:run>', '<hp:t>성명</hp:t></hp:run><hp:run charPrIDRef="1"><hp:t> 홍길동</hp:t></hp:run>'), [], (r) => r.cat.other === 0 && r.cat.run_add === 1 && r.lost === 0 && r.extra === 0 && r.missing === 0],
+    ['같은 문단에 값 덩이 — 그 문단에 없던 글자 모양 번호', base, base.replace('<hp:t>성명</hp:t></hp:run>', '<hp:t>성명</hp:t></hp:run><hp:run charPrIDRef="2"><hp:t> 홍길동</hp:t></hp:run>'), [], (r) => r.cat.other > 0],
+    ['같은 문단에 값 덩이 — 덩이에 다른 속성', base, base.replace('<hp:t>성명</hp:t></hp:run>', '<hp:t>성명</hp:t></hp:run><hp:run charPrIDRef="1" x="1"><hp:t> 홍길동</hp:t></hp:run>'), [], (r) => r.cat.other > 0],
+    ['자리 표시 갈아 끼움(도구가 알린 글 「○○○ (인)」)', gBase, gBase.replace('성명 ○○○ (인)', '성명 홍길동 (인)'), ['○○○ (인)'], (r) => r.cat.other === 0 && r.cat.guide_replace === 1 && r.lost === 0 && r.extra === 0 && r.missing === 0 && r.guide_chars === 3],
+    ['자리 표시 갈아 끼움 — 알린 글 밖의 글자(「성명」)까지 지움', gBase, gBase.replace('성명 ○○○ (인)', '홍길동 (인)'), ['○○○ (인)'], (r) => r.cat.other > 0 && r.lost > 0],
+    ['자리 표시 — 도구가 알리지 않았는데 글을 지움', gBase, gBase.replace('성명 ○○○ (인)', '성명 홍길동 (인)'), [], (r) => r.cat.other > 0 && r.lost > 0],
+    ['자리 표시 몫으로 다른 문단의 글(「확인자 (인)」의 「(인)」)을 지움', gBase.replace('</hs:sec>', '<hp:p id="9" paraPrIDRef="1"><hp:run charPrIDRef="3"><hp:t>확인자 (인)</hp:t></hp:run></hp:p></hs:sec>'), gBase.replace('성명 ○○○ (인)', '성명 홍길동 (인)').replace('</hs:sec>', '<hp:p id="9" paraPrIDRef="1"><hp:run charPrIDRef="3"><hp:t>확인자</hp:t></hp:run></hp:p></hs:sec>'), ['○○○ (인)'], (r) => r.cat.other > 0 && r.lost > 0],
+    ['같은 문단 두 곳에 그 문단에 없던 글자 모양 덩이(서로 정당화)', base, base.replace('<hp:run charPrIDRef="1"><hp:t>성명</hp:t></hp:run>', '<hp:run charPrIDRef="2"><hp:t>가</hp:t></hp:run><hp:run charPrIDRef="1"><hp:t>성명</hp:t></hp:run><hp:run charPrIDRef="2"><hp:t>홍길동</hp:t></hp:run>'), [], (r) => r.cat.other > 0],
+    ['자리 표시 「-」 몫으로 값이 들지 않은 다른 문단의 「-」를 지움', gBase.replace('성명 ○○○ (인)', '성명 -').replace('</hs:sec>', '<hp:p id="9" paraPrIDRef="1"><hp:run charPrIDRef="3"><hp:t>-</hp:t></hp:run></hp:p></hs:sec>'), gBase.replace('성명 ○○○ (인)', '성명 -홍길동').replace('</hs:sec>', '<hp:p id="9" paraPrIDRef="1"><hp:run charPrIDRef="3"><hp:t></hp:t></hp:run></hp:p></hs:sec>'), ['-'], (r) => r.cat.other > 0 && r.lost > 0],
+    ['글이 빠지기만 함(값 없는 덩이)', base, base.replace('<hp:t>성명</hp:t>', '<hp:t></hp:t>'), [], (r) => r.cat.other > 0 && r.lost > 0],
+  ];
+  // header.xml 에 없는 글자 모양 번호 — 빈 문단·새 문단의 값 덩이(글자 모양 번호 1·2·3 만 있는 header 로)
+  const eBase = '<hs:sec><hp:p id="8" paraPrIDRef="1"><hp:linesegarray><hp:lineseg textpos="0"/></hp:linesegarray></hp:p></hs:sec>', ids = new Set(['1', '2', '3']);
+  const hdrCases = [
+    ['빈 문단에 값 덩이(header.xml 에 있는 번호)', eBase.replace('<hp:linesegarray><hp:lineseg textpos="0"/></hp:linesegarray>', '<hp:run charPrIDRef="2"><hp:t>홍길동</hp:t></hp:run>'), (r) => r.cat.other === 0 && r.cat.run_add === 1 && r.lost === 0 && r.extra === 0],
+    ['빈 문단에 값 덩이 — header.xml 에 없는 번호', eBase.replace('<hp:linesegarray><hp:lineseg textpos="0"/></hp:linesegarray>', '<hp:run charPrIDRef="999999999"><hp:t>홍길동</hp:t></hp:run>'), (r) => r.cat.other > 0],
+    ['새 문단 — header.xml 에 없는 번호', eBase.replace('</hs:sec>', '<hp:p id="0" paraPrIDRef="1"><hp:run charPrIDRef="77"><hp:t>홍길동</hp:t></hp:run></hp:p></hs:sec>'), (r) => r.cat.other > 0],
+  ];
+  for (const [name, xml, ok] of hdrCases) { const r = compareSection(eBase, xml, v1, true, [], ids); const pass = ok(r); if (!pass) bad++; console.log(`${pass ? '맞음' : '틀림'} — ${name} · ${JSON.stringify({ cat: r.cat, lost: r.lost, extra: r.extra })}`); }
+  for (const [name, b0, xml, guides, ok] of newCases) { const r = compareSection(b0, xml, v1, true, guides); const pass = ok(r); if (!pass) bad++; console.log(`${pass ? '맞음' : '틀림'} — ${name} · ${JSON.stringify({ cat: r.cat, lost: r.lost, extra: r.extra, missing: r.missing, guide_chars: r.guide_chars })}`); }
+  const nAll = cases.length + dateCases.length + newCases.length + hdrCases.length;
+  console.log(bad ? `스스로 시험 ${nAll}개 중 ${bad}개 틀림` : `스스로 시험 ${nAll}개 모두 맞음`);
   process.exit(bad ? 1 : 0);
 }
 
@@ -368,19 +462,25 @@ for (const d of docs) {
     row.base_hash = contentHash(ZA); row.filled_hash = contentHash(ZB);
     // 본문 견주기 — 바뀐 본문들을 합쳐 셈(넣은 값은 문서 전체에서 한 번씩). 값은 도구가 알린 넣은 값(날짜는 「2026년 11월 27일」처럼 서식 꼴로 바뀌어 옴)
     const filledVals = filled.filter((x) => x.kind !== 'check').map((x) => ({ value: String(x.value ?? ''), kind: x.kind }));
+    // 자리 표시 갈아 끼움 — on_fields 가 그 칸에 자리 표시 글(guide)을 알리고 on_fill 이 「자리 표시 글 대신」 넣었다고 한 칸만(0.3.x)
+    const guideOf = new Map(fields.map((x) => [x.key, x.guide]));
+    const guides = filled.filter((x) => /자리 표시/.test(String(x.how || '')) && guideOf.get(x.key)).map((x) => String(guideOf.get(x.key)));
+    row.guide_fields = guides.length;
     const aAll = [], bAll = [];
     for (const name of ZA.filter((x) => /^Contents\/section\d+\.xml$/.test(x.name)).map((x) => x.name)) { aAll.push(ZA.find((x) => x.name === name).data.toString('utf8')); bAll.push((bm.get(name) || { data: Buffer.alloc(0) }).data.toString('utf8')); }
-    const c = compareSection(aAll.join('\n'), bAll.join('\n'), filledVals, check.length > 0);
+    const hdr = ZA.find((x) => x.name === 'Contents/header.xml');
+    const charIds = hdr ? new Set([...hdr.data.toString('utf8').matchAll(/<hh:charPr\b[^>]*\bid="(\d+)"/g)].map((m) => m[1])) : null;
+    const c = compareSection(aAll.join('\n'), bAll.join('\n'), filledVals, check.length > 0, guides, charIds && charIds.size ? charIds : null);
     row.sections_changed = changedSections.length;
-    row.section = { ...c.cat, other_detail: [...new Set(c.other)].slice(0, 5), lineseg_elsewhere: c.lineseg_elsewhere, chars_lost: c.lost, chars_extra: c.extra, value_chars_missing: c.missing, reused_date_marks: c.reused_date_marks };
+    row.section = { ...c.cat, other_detail: [...new Set(c.other)].slice(0, 5), lineseg_elsewhere: c.lineseg_elsewhere, chars_lost: c.lost, chars_extra: c.extra, value_chars_missing: c.missing, reused_date_marks: c.reused_date_marks, guide_chars: c.guide_chars };
     // 다시 열기 — 같은 꾸러미 on_read 로. 기준(같은 HWPX 꼴)과 견주어 넣은 값 말고 글자·숫자가 바뀌지 않았는가, 넣은 값이 보이는가
     const noTags = (s) => s.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ').replace(/<[^>]*>/g, ' ');   // 그림 자리 표시(![그림](BIN0001.bmp) — .hwp 와 HWPX 의 그림 이름이 다름)·표 HTML(<td colspan="2">·<br>)의 글자는 셈에서 뺀다
     const rBase = readBody(await tool('on_read', { file_path: row.fmt === 'hwp' ? path.join(OUT, 'files', `${d.id}.base.hwpx`) : d.file, mask: false }));
     const rFill = readBody(await tool('on_read', { file_path: outPath, mask: false }));
     const norm = (s) => s.replace(/\s+/g, '');
     const seen = filledVals.filter((v) => norm(rFill).includes(norm(v.value))).length;
-    const R = ledger(noTags(rBase), noTags(rFill), filledVals, check.length > 0, bagLN);
-    row.reopen = { ok: rFill.length > 0, values_seen: seen, values: filledVals.length, lost_letters: R.lost, extra_letters: R.extra, value_letters_missing: R.missing };
+    const R = ledger(noTags(rBase), noTags(rFill), filledVals, check.length > 0, bagLN, c.replaced);
+    row.reopen = { ok: rFill.length > 0, values_seen: seen, values: filledVals.length, lost_letters: R.lost, extra_letters: R.extra, value_letters_missing: R.missing, guide_letters: R.guide_chars };
     // (.hwp 만) 바꾸기 몫 — .hwp 원본을 읽은 글과 바꾼 HWPX 를 읽은 글의 글자·숫자 차이(채우기와 상관없음, 따로 적음)
     if (row.fmt === 'hwp') { const rOrig = readBody(await tool('on_read', { file_path: d.file, mask: false })); const X = ledger(noTags(rOrig), noTags(rBase), [], false, bagLN); row.convert_read_diff = { lost_letters: X.lost, extra_letters: X.extra }; }
     row.pass = row.zip.same_names_order && row.zip.same_methods && row.zip.mimetype_first_stored && !changedOther.length
@@ -411,7 +511,11 @@ const sum = {
   error_kinds: tally(rows.filter((r) => r.error && r.sha1).map((r) => /너무 커요/.test(r.error) ? '도구가 거절 — 문서 속 그림이 너무 큼(화소 한도)' : r.error.slice(0, 60))),
   values_asked: rows.reduce((s, r) => s + (r.asked || 0), 0), values_filled: rows.reduce((s, r) => s + (r.filled || 0), 0),
   skipped_by_tool: tally(rows.flatMap((r) => Array.isArray(r.skipped_by_tool) ? r.skipped_by_tool : [])),
-  categories: ['text_insert', 'new_para', 'check', 'lineseg_removed', 'other'].reduce((o, k) => (o[k] = made.reduce((s, r) => s + ((r.section || {})[k] || 0), 0), o), {}),
+  // 옛 견주기(0.2.x 때 갈래 넷)로만 보아도 「그대로」인 문서 — 새 갈래 둘(같은 문단에 값 덩이·자리 표시 갈아 끼움)을 하나도 쓰지 않은 것
+  pass_without_new_kinds: made.filter((r) => r.pass && !(r.section.run_add || r.section.guide_replace || r.section.guide_chars || (r.reopen || {}).guide_letters)).length,
+  guide_fields: made.reduce((s, r) => s + (r.guide_fields || 0), 0),
+  guide_chars: made.reduce((s, r) => s + ((r.section || {}).guide_chars || 0), 0),
+  categories: ['text_insert', 'new_para', 'run_add', 'guide_replace', 'check', 'lineseg_removed', 'other'].reduce((o, k) => (o[k] = made.reduce((s, r) => s + ((r.section || {})[k] || 0), 0), o), {}),
   zip_same_names_order_methods: made.filter((r) => r.zip.same_names_order && r.zip.same_methods && r.zip.mimetype_first_stored).length,
   other_entries_changed_docs: made.filter((r) => (r.other_entries_changed || []).length).length,
   lineseg_elsewhere: made.reduce((s, r) => s + ((r.section || {}).lineseg_elsewhere || 0), 0),
@@ -424,7 +528,7 @@ const sum = {
 };
 fs.writeFileSync(path.join(OUT, 'result.json'), JSON.stringify({ summary: sum, docs: rows }, null, 1) + '\n');
 console.error(`끝 — 문서 ${sum.docs} · 채울 곳 찾음 ${sum.with_fields}(빈 칸 없음 ${sum.no_empty_field}) · 채울 곳 없음 ${sum.no_fields} · 도구 거절·오류 ${sum.errors}`);
-console.error(`  채운 파일을 만든 문서 ${sum.filled_docs}(hwp ${sum.hwp} · hwpx ${sum.hwpx}) · 서식 그대로 ${sum.pass} · 다름 ${sum.fail} · 넣은 값 ${sum.values_filled}/${sum.values_asked} · 건너뛴 칸 ${JSON.stringify(sum.skipped_by_tool)}`);
+console.error(`  채운 파일을 만든 문서 ${sum.filled_docs}(hwp ${sum.hwp} · hwpx ${sum.hwpx}) · 서식 그대로 ${sum.pass}(옛 갈래 넷만 ${sum.pass_without_new_kinds}) · 다름 ${sum.fail} · 넣은 값 ${sum.values_filled}/${sum.values_asked} · 건너뛴 칸 ${JSON.stringify(sum.skipped_by_tool)}`);
 console.error(`  본문 갈래 ${JSON.stringify(sum.categories)} · 본문 밖 항목이 바뀐 문서 ${sum.other_entries_changed_docs} · 빠진 글자(XML) ${sum.chars_lost} · 다시 읽어 빠진 글자 ${sum.reopen_lost_letters}`);
 console.error(`  결과 ${path.join(OUT, 'result.json')} · 만든 파일 ${path.join(OUT, 'files')}`);
 {
