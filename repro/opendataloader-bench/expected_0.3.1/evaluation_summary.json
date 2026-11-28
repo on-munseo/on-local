@@ -8,7 +8,7 @@
     "total_elapsed": 94.094,
     "elapsed_per_doc": 0.47,
     "date": "2026-11-28",
-    "package": "on-munseo-local@0.3.3",
+    "package": "on-munseo-local@0.3.4",
     "package_commit": "6ed32cae1f9a6e3d51662e2e980bb88fe3bdd1aa",
     "engine": "On 한글엔진 2.2.3 · 표식 판 wasm d7f9fdd85384",
     "network_blocked_by_node": true,

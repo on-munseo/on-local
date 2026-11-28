@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT (repro/LICENSE — 대본만. 부르는 npm 꾸러미는 저장소 맨 위 LICENSE.md)
 // korean-pii-benchmark-v3 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)만으로 개인정보 찾기를 다시 잰다.
 //
-//   node run.mjs [--pkg on-munseo-local@0.3.3] [--data <benchmark_v3.jsonl>] [--out <폴더>]
+//   node run.mjs [--pkg on-munseo-local@0.3.4] [--data <benchmark_v3.jsonl>] [--out <폴더>]
 //
 // · 다른 꾸러미를 쓰지 않는다(Node 20 이상). 꾸러미는 `npx -y <--pkg>` 로 받아 MCP 서버(표준 입출력)로 띄우고 JSON-RPC 를 직접 주고받는다.
 // · 자료: 허깅페이스 schift-io/korean-pii-benchmark-v3(CC-BY-SA-4.0) 의 benchmark_v3.jsonl — 커밋을 고정해 받고 SHA-256 을 맞대 본다(--data 로 받아 둔 파일을 줘도 됨, 그때도 지문을 본다).
@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i < 0 ? d : argv[i + 1]; };
-const PKG = opt('pkg', 'on-munseo-local@0.3.3');
+const PKG = opt('pkg', 'on-munseo-local@0.3.4');
 const OUTD = path.resolve(opt('out', path.join(HERE, 'out')));
 const DATA_COMMIT = '6dfeb331800d9c3b6318e40f92fe57d317e9ae3f';   // 허깅페이스 저장소 커밋(2026-08-19 마지막 바뀜)
 const DATA_URL = `https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3/resolve/${DATA_COMMIT}/benchmark_v3.jsonl`;
