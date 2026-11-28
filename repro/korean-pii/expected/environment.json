@@ -1,7 +1,7 @@
 {
-  "package": "on-munseo-local@0.2.1",
-  "package_tgz_sha256": "515af0dfddad30f41c459dd98d73535f73292c666fed07d4a6e535e2a60bda72",
-  "package_integrity": "sha512-ZUDX+etH2wg/Y+lQCsQhyY5/4gfVDjwjWUQsofFUgYlBotWtvXw7lcz5yHGT3qMJna8mP60HH9vWp/PF2T5T4Q==",
+  "package": "on-munseo-local@0.3.1",
+  "package_tgz_sha256": "ffcc94e1d3f20517f6f136c595b94a9100998eba511f4e03978cf45e4a2a0be7",
+  "package_integrity": "sha512-xxXG3RgcFJtNI5NlZ7uh+qciJl0YYWwHt/RtOZW81fYMnNYXOd0DxoQiIQss0r53uSvfJiuJi67UWsuN4hVJ0g==",
   "data": {
     "repo": "huggingface.co/datasets/schift-io/korean-pii-benchmark-v3",
     "commit": "6dfeb331800d9c3b6318e40f92fe57d317e9ae3f",
@@ -12,13 +12,30 @@
   },
   "runs": [
     {
+      "date": "2026-11-28",
+      "machine": "Apple M5 Pro",
+      "node": "v25.9.0",
+      "package": "on-munseo-local@0.3.1",
+      "times": 4,
+      "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa",
+      "note": "허깅페이스에서 새로 받아 2번 · 받아 둔 사본 2번"
+    },
+    {
+      "date": "2026-11-28",
+      "machine": "Apple M5 Pro",
+      "node": "v22.17.0",
+      "package": "on-munseo-local@0.3.1",
+      "times": 1,
+      "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa"
+    },
+    {
       "date": "2026-11-27",
       "machine": "Apple M5 Pro",
       "node": "v25.9.0",
       "package": "on-munseo-local@0.2.1",
       "times": 3,
       "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa",
-      "note": "받아 둔 사본 2번 · 허깅페이스에서 새로 받아 1번"
+      "note": "받아 둔 사본 2번 · 허깅페이스에서 새로 받아 1번 (앞 판)"
     },
     {
       "date": "2026-11-27",
@@ -26,7 +43,8 @@
       "node": "v22.17.0",
       "package": "on-munseo-local@0.2.1",
       "times": 1,
-      "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa"
+      "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa",
+      "note": "(앞 판)"
     },
     {
       "date": "2026-11-27",
@@ -35,7 +53,7 @@
       "package": "on-munseo-local@0.2.0",
       "times": 1,
       "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa",
-      "note": "0.2.0 도 473줄 모두 같음"
+      "note": "0.2.0 도 473줄 모두 같음 (앞 판)"
     }
   ]
 }
