@@ -1,5 +1,5 @@
 {
-  "package": "on-munseo-local@0.3.2",
+  "package": "on-munseo-local@0.3.3",
   "package_tgz_sha256": "ffcc94e1d3f20517f6f136c595b94a9100998eba511f4e03978cf45e4a2a0be7",
   "package_integrity": "sha512-xxXG3RgcFJtNI5NlZ7uh+qciJl0YYWwHt/RtOZW81fYMnNYXOd0DxoQiIQss0r53uSvfJiuJi67UWsuN4hVJ0g==",
   "data": {
@@ -15,7 +15,7 @@
       "date": "2026-11-28",
       "machine": "Apple M5 Pro",
       "node": "v25.9.0",
-      "package": "on-munseo-local@0.3.2",
+      "package": "on-munseo-local@0.3.3",
       "times": 4,
       "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa",
       "note": "허깅페이스에서 새로 받아 2번 · 받아 둔 사본 2번"
@@ -24,7 +24,7 @@
       "date": "2026-11-28",
       "machine": "Apple M5 Pro",
       "node": "v22.17.0",
-      "package": "on-munseo-local@0.3.2",
+      "package": "on-munseo-local@0.3.3",
       "times": 1,
       "rows_sha256": "d62c29664f4f07465657b8e3c09664a197f2b1f1cd577fc07b5b4434a82e18fa"
     },
