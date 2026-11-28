@@ -1,11 +1,11 @@
 # 개인정보 찾기 다시 재기 — 공개 시험 korean-pii-benchmark-v3, npm 꾸러미만으로
 
-공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3)(CC-BY-SA-4.0, 473줄)를 **On 문서 내 PC 판(npm `on-munseo-local@0.3.1`)** 의 개인정보 도구로 읽고 정답과 맞대는 대본입니다. 비공개 코드는 쓰지 않습니다. 필요한 것은 공개 npm 꾸러미, 공개 자료 파일, 이 폴더의 대본 `run.mjs`(다른 꾸러미 없이 Node 만으로 돎)뿐이라 누구나 같은 숫자를 다시 낼 수 있습니다.
+공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3)(CC-BY-SA-4.0, 473줄)를 **On 문서 내 PC 판(npm `on-munseo-local@0.3.2`)** 의 개인정보 도구로 읽고 정답과 맞대는 대본입니다. 비공개 코드는 쓰지 않습니다. 필요한 것은 공개 npm 꾸러미, 공개 자료 파일, 이 폴더의 대본 `run.mjs`(다른 꾸러미 없이 Node 만으로 돎)뿐이라 누구나 같은 숫자를 다시 낼 수 있습니다.
 
 - 이 시험에는 공식 채점기와 순위표가 없습니다. 그래서 **채점 정의는 우리가 정했고**, 아래와 `run.mjs` 머리 주석에 그대로 적었습니다. 정답은 그 시험 자료에 붙은 표시를 그대로 씁니다.
 - 자료는 허깅페이스 저장소의 커밋 `6dfeb331800d9c3b6318e40f92fe57d317e9ae3f` 로 고정해 받고, SHA-256 `0aa9303bff69b895bd4f29da451ac8f5c4a86220f80b1314cb9f7279a68279dc` 와 맞대 봅니다. 시험 문장은 합성 자료이지만 이 폴더에는 싣지 않습니다.
 
-## 우리가 돌린 값(2026-11-28, `on-munseo-local@0.3.1`)
+## 우리가 돌린 값(2026-11-28, `on-munseo-local@0.3.2`)
 
 | 종류 | 찾음률 | 정밀도 | 맞음 · 헛찾음 · 놓침 |
 |---|---|---|---|
@@ -28,7 +28,7 @@
 필요한 것: Node.js 20 이상. 다른 꾸러미는 깔지 않습니다.
 
 ```sh
-node run.mjs                                   # 자료를 고정 커밋에서 받아(cache/) 지문을 확인하고, npx -y on-munseo-local@0.3.1 로 473줄을 잼
+node run.mjs                                   # 자료를 고정 커밋에서 받아(cache/) 지문을 확인하고, npx -y on-munseo-local@0.3.2 로 473줄을 잼
 node run.mjs --data <받아 둔 benchmark_v3.jsonl> # 받아 둔 파일로(지문은 그대로 확인)
 node run.mjs --pkg on-munseo-local@<판>          # 다른 판으로 — 판이 다르면 값이 달라질 수 있고, expected/ 와 다른 줄을 알려 줌
 ```

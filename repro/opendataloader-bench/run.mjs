@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT (repro/LICENSE — 대본만. 부르는 npm 꾸러미는 저장소 맨 위 LICENSE.md)
 // opendataloader-bench 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)만으로 PDF 200개의 마크다운을 만든다.
 //
-//   node run.mjs <opendataloader-bench 폴더> [--pkg on-munseo-local@0.3.1] [--name on-munseo-local]
+//   node run.mjs <opendataloader-bench 폴더> [--pkg on-munseo-local@0.3.2] [--name on-munseo-local]
 //
 // · 이 대본은 다른 꾸러미를 쓰지 않는다(Node 20 이상). 꾸러미는 `npx -y <--pkg>` 로 받아 MCP 서버(표준 입출력)로 띄우고,
 //   MCP 의 JSON-RPC(initialize → notifications/initialized → tools/call)를 직접 주고받는다.
@@ -22,11 +22,11 @@ import { fileURLToPath } from 'node:url';
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i < 0 ? d : argv[i + 1]; };
 const BENCH = argv.find((a, i) => !a.startsWith('--') && !(i > 0 && argv[i - 1].startsWith('--')));
-const PKG = opt('pkg', 'on-munseo-local@0.3.1');
+const PKG = opt('pkg', 'on-munseo-local@0.3.2');
 const NAME = opt('name', 'on-munseo-local');
 const TIMEOUT_MS = +opt('timeout', '300000');   // 문서 하나 상한(5분) — 넘으면 오류로 적고 서버를 다시 띄운다
 if (!BENCH || !fs.existsSync(path.join(BENCH, 'pdfs')) || !fs.existsSync(path.join(BENCH, 'ground-truth'))) {
-  console.error('사용: node run.mjs <opendataloader-bench 폴더> [--pkg on-munseo-local@0.3.1] [--name on-munseo-local]\n(그 폴더에 pdfs/ 와 ground-truth/ 가 있어야 합니다)');
+  console.error('사용: node run.mjs <opendataloader-bench 폴더> [--pkg on-munseo-local@0.3.2] [--name on-munseo-local]\n(그 폴더에 pdfs/ 와 ground-truth/ 가 있어야 합니다)');
   process.exit(2);
 }
 const ROOT = path.resolve(BENCH), PDFS = path.join(ROOT, 'pdfs');

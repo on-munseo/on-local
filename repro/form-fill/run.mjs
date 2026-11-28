@@ -3,7 +3,7 @@
 // 서식 채우기 재현 대본 — npm 꾸러미 on-munseo-local(On 문서 내 PC 판)의 on_fields → on_fill 이
 // 「원래 서식은 그대로 두고 칸의 글만 바꾸는지」를 문서마다 잰다.
 //
-//   node run.mjs [--sources sources.json] [--cache cache] [--out out] [--pkg on-munseo-local@0.3.1]
+//   node run.mjs [--sources sources.json] [--cache cache] [--out out] [--pkg on-munseo-local@0.3.2]
 //   node run.mjs --files <문서 목록.txt>        (내 PC 의 문서 목록으로 — 한 줄에 경로 하나)
 //
 // · 다른 꾸러미를 쓰지 않는다(Node 20 이상). zip 풀기는 Node 안의 zlib 로 직접 한다.
@@ -42,7 +42,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i < 0 ? d : argv[i + 1]; };
-const PKG = opt('pkg', 'on-munseo-local@0.3.1');
+const PKG = opt('pkg', 'on-munseo-local@0.3.2');
 const OUT = path.resolve(opt('out', path.join(HERE, 'out')));
 const FILES = opt('files', null);
 const SOURCES = path.resolve(opt('sources', path.join(HERE, 'sources.json')));
