@@ -10,6 +10,8 @@
 
 </div>
 
+**0.3.2 는 npm 게시 전 묶음입니다(2026-11-28).** npm 최신은 0.3.1 입니다. 아래 0.3.2 기능·측정값은 이 묶음 기준이며, 엔진은 **On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051** 입니다(2.2.3 에 쪽 나눔 고침 다섯). [바뀐 점](CHANGELOG.md) · [묶음 재현값·지문](repro/opendataloader-bench#032-npm-게시-전-묶음으로-돌린-값2026-11-28)
+
 하나로 다섯 가지 일을 합니다 — 한글(HWP·HWPX·HML)·PDF·워드·엑셀·파워포인트 문서를 내 컴퓨터 안에서 **읽고**(글·표를 마크다운으로, 두 판의 신구 대비표까지), 공문서 꼴 한글 문서(보고서·계획서·결과보고서·보도자료)·예시 양식 66종·서식을 **만들고 채우고**, 한글 문서의 쪽을 한글과 같은 쪽 나눔으로 **그림(PNG)으로 보여 주고**(만든 문서를 눈으로 확인), 공문서 표기를 **점검**하고, 개인정보를 **찾아 가립니다**(가린 글·가린 한글 파일). 법령 원문은 짝 주소(On 근거)로 붙입니다. AI(언어 모델) 없이 규칙으로 합니다.
 
 **하는 일(일의 낱말로)** — 읽기(한글·PDF·워드·엑셀·파워포인트의 글·표) · 신구 대비표(두 판 견주기) · 결재 전 점검(예산 검산 — 산출근거 곱셈·표 합계·증감 · 공문서 형식·맞춤법·날짜·요일·금액) · 개인정보 찾기·가리기(가린 글·가린 한글 파일) · 공문서 쓰기(보고서·계획서·결과보고서·보도자료) · 예시 양식 66종 채우기 · 서식 채우기(칸만 채우고 서식은 그대로 · 고친 글 되돌려 넣기) · 글을 표로 · HWP→HWPX 바꾸기 · 쪽 그림(한글과 같은 쪽 나눔의 PNG) · 글 다듬기(개조식·맞춤법·쉬운 말). 법령 원문·인용 확인은 짝 주소. 도구 이름은 설치 뒤 `on_local_info` 의 `tools_here` 에 모두 나옵니다.
@@ -95,7 +97,7 @@
 | | `on_table` | 「항목: 값」·탭(엑셀 복사)·「\|」 줄을 공문서 표로(원문 숫자 대조·합계 확인) |
 | On 한글파일 만들기 | `on_write` | 마크다운을 꾸밈 없는 한글(HWPX)로(공문서처럼 보이는 원고는 공문서 꼴로 — `plain: true` 면 끔) |
 | | `on_to_hwpx` | 문서를 HWPX 로 — 예전 한글(.hwp)은 서식 그대로, PDF·워드·엑셀·파워포인트는 읽은 글·표로 다시 짬 |
-| | `on_fields` · `on_fill` | 서식(한글)의 채울 곳 찾기(누름틀·이름 칸·표 안 빈칸·괄호 빈칸·고르는 칸·날짜 자리) · 값 넣기, 고친 글을 원래 서식에 되돌려 넣기(`replace`·`cells` — 바뀐 글자만 갈아 끼우고 글자 모양 그대로) |
+| | `on_fields` · `on_fill` | 서식(한글)의 채울 곳 찾기(누름틀·이름 칸·표 안 빈칸·괄호 빈칸·고르는 칸·날짜 자리) · 값 넣기, 고친 글을 원래 서식에 되돌려 넣기(`replace`·`cells` — 바뀐 글자만 갈아 끼우고 글자 모양 그대로). 0.3.2 게시 전 묶음은 원래 .hwp 서식을 채우면 HWPX 와 .hwp 를 함께 줌(아래 설명) |
 | | `on_render_pages` · `on_pages` | 한글 문서(.hwp·.hwpx)의 쪽을 한글과 같은 쪽 나눔·줄바꿈으로 그린 그림(PNG) — 「1-3,5」 꼴로 한 번에 6쪽·배율 0.5~1.5 · 지정한 쪽(4쪽까지). `on_write_gov` 의 `preview`(1~2)로 만든 문서의 앞 쪽 그림을 함께 받기도 합니다 |
 | PDF 만들기 | `on_pdf` | PDF 파일 만들기 |
 | 그래프·체계도 그림 | `on_chart` · `on_diagram` | 그래프·체계도를 그림으로 만들기 |
@@ -104,6 +106,9 @@
 
 - 문서는 `file_path` 에 내 컴퓨터의 전체 경로로 줍니다(예: `~/문서/계획서.hwp`, `D:\문서\계획서.hwpx` — `~` 는 내 홈 폴더). 한글·빈칸이 든 경로도 됩니다. 대비표는 `a_path`·`b_path`. base64 로 싣지 않으므로 큰 문서도 대화가 무거워지지 않습니다.
 - 만든 한글(공문서·양식·표·서식 채우기·HWPX 바꾸기·가린 한글)은 `output_path`(예: `~/문서/보고서.hwpx`)에 저장합니다. 주지 않으면 결과 폴더(`~/On문서_결과`)에 둡니다. 새 파일만 만들고, 같은 이름이 있으면 덮어쓰지 않고 「(2)」를 붙입니다.
+- **0.3.2 게시 전 묶음의 서식 채우기(`on_fill`, `replace`·`cells` 포함)** — 원래 .hwp 는 HWPX 와 .hwp 를 함께 줍니다(`as` 기본 `both`, `as: "hwpx"` 면 HWPX 만). 바뀐 문단만 갈아 끼우고 나머지 기록(문서 정보·그림)은 원본 바이트 그대로 둡니다. 본문이 바뀌면 미리보기 글은 새 글, 미리보기 그림은 빈 그림으로 바꿉니다. 낸 .hwp 를 다시 읽어 채운 글과 같을 때만 주고, 맞추지 못하면(배포용·암호·큰 파일 등) HWPX 만 주며 까닭을 알립니다. 법령 서식 80개 중 채울 칸 있는 48개를 채워 모두 .hwp 로 냈고 다시 읽은 글이 같았습니다. 원래 .hwpx 와 다른 도구(`on_write`·`on_to_hwpx` 등)의 결과는 그대로 HWPX 만입니다.
+- **0.3.2 게시 전 묶음의 영어 PDF 고침** — 왼쪽 단 아래 각주 차례, 수학 글자 겹침(`𝜇𝜇` → `𝜇`), 아래에서 위로 쓴 그래프 세로축 이름, 점으로 칠한 얇은 다각형 표 테두리입니다. 한국어 PDF 짝 1,727개의 출력은 그대로였습니다(다른 문서 0).
+- **표 HTML 줄바꿈 선택** — `on_read` 의 `table_layout: "pretty"` 는 태그마다 줄 바꿔 씁니다(글·칸 같음). 서버 판에서 종합 0.975(0.9749)였습니다. 정답 표가 그 꼴로 적혀 있어 읽는 순서 값이 오르는 것이므로 기본이 아닙니다.
 - 쪽 그림은 네이티브 부품 없이 그립니다 — 원격 서버와 같은 그리기 코드에 Skia(CanvasKit, wasm)와 On폭 글꼴(꾸러미 안)을 씁니다. 그 컴퓨터에 한글 글꼴이 없어도 같은 그림이 나옵니다([원격과 같은 그림](#쪽-그림--원격과-같은-그림)).
 - 0.3.1 에는 PDF 만들기(`on_pdf`)·그래프 그림(`on_chart`)·체계도 그림(`on_diagram`)과 가벼운 그림 글 읽기가 들어 있습니다. 그림 글 읽기의 범위는 [한계·알아 둘 점](#한계알아-둘-점)에 있습니다.
 - 도장은 이 판에 없습니다. 원격 On 문서(`https://onmunseo.kr/mcp`)에 있습니다.
@@ -126,15 +131,16 @@
 
 ## 믿을 근거 — 남이 다시 확인할 수 있는 것
 
-**누구나 다시 잴 수 있는 숫자.** 아래 셋은 공개한 대본·공개 출처·이 npm 꾸러미만으로 돌아갑니다(비공개 코드 없음). 우리가 잰 값이지만, 남이 같은 값을 다시 낼 수 있습니다.
+**누구나 다시 잴 수 있는 숫자.** 공개한 대본·공개 출처·해당 판 꾸러미만으로 돌아갑니다(비공개 코드 없음). 0.3.2 는 npm 게시 전 묶음 파일을 지정해 쟀으며, 기존 npm 0.3.1 기록과 기댓값도 함께 둡니다.
 
 | 무엇 | 값 | 다시 재는 법 |
 |---|---|---|
-| 영어 PDF 200쪽 — [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | 내 PC 판 0.3.1 — 그림 속 글을 가볍게 글자 인식해 **0.971**(0.9707 · 읽는 순서 0.972 · 표 0.980 · 제목 0.959). 서버 판 기본 읽기 값과 네 자리까지 같음 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.3.1`. 결과 200개 지문이 두 번 모두 같음. 글자 인식이 없던 0.2.0~0.3.0 은 0.945 |
+| 영어 PDF 200개 — 0.3.2 npm 게시 전 묶음, opendataloader-bench 공식 채점기(고치지 않음) | **0.9713**(0.9713178891529214 · 읽는 순서 0.9727 · 표 0.9807 · 제목 0.9593). 시험용 125개 0.9706 · 개발용 75개 0.9725. 오류 0 · 문서당 0.316초(맥북 M5 Pro, 2026-11-28, 표준 입출력 포함·서버 띄우기 뺌) | [repro/opendataloader-bench](repro/opendataloader-bench) — `--pkg file:<묶음>`, 기댓값 `expected_0.3.2/`. 같은 날 같은 기계의 서버 판 기본 0.97136 과 예측 200개 중 190개가 바이트까지 같음 |
+| 영어 PDF 200개 — 게시된 0.3.1 기록, [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench) 공식 채점기(고치지 않음) 종합 | 내 PC 판 0.3.1 — 그림 속 글을 가볍게 글자 인식해 **0.971**(0.9707 · 읽는 순서 0.972 · 표 0.980 · 제목 0.959). 2026-11-26 서버 판 기본 읽기 값과 네 자리까지 같음 | [repro/opendataloader-bench](repro/opendataloader-bench) — `on-munseo-local@0.3.1`. 결과 200개 지문이 두 번 모두 같음. 글자 인식이 없던 0.2.0~0.3.0 은 0.945 |
 | 서식 채우기 — 법제처 공개 법령 서식·별지 709개 | 값을 넣은 655개 가운데 **638개가 원래 서식 그대로**(글꼴·문단·표 모양과 그림은 바이트 그대로, 본문 짜임 같음, 빠진 글자 0 — 도구가 미리 알린 자리 표시 글을 값으로 갈아 끼운 24칸은 따로 셈). 남은 17개 가운데 14개는 「처리기간」 칸에 그 문단에 없던 글자 모양으로 값을 넣은 것, 1개는 날짜 칸과 쌍점 칸이 겹친 서식의 결함(고칠 것) | [repro/form-fill](repro/form-fill) — `on-munseo-local@0.3.1` · 서식 709개의 원 출처 주소·SHA-1 목록. 다섯 번 돌려 만든 파일 지문이 모두 같음. 0.2.0 은 654개 중 653개 |
 | 개인정보 찾기 — 공개 시험 [korean-pii-benchmark-v3](https://huggingface.co/datasets/schift-io/korean-pii-benchmark-v3) 473줄(정답은 그 시험의 표시, 채점 정의는 우리가 적음) | 사람 이름 찾음률 **95.6%**(정밀도 100%) · 주소 **97.9%**(100%) · 가리면 안 되는 문장 59줄 중 가린 줄 0. 약한 곳: 전화번호 43.1%(65개 중 28개 — 지역번호로 시작하는 일반 전화를 이 판이 가리지 않음, 휴대전화는 가림). 이 시험은 규칙을 고칠 때 본 것이라 실제보다 높게 나올 수 있음 | [repro/korean-pii](repro/korean-pii) — `on-munseo-local@0.3.1`(서버 판과 같은 모델·같은 값 · 0.2.1·0.3.0 도 473줄 같음). 다섯 번 돌려 473줄 찾은 자리가 모두 같음 |
 
-- 영어 PDF 값은 0.3.1 부터 그림 속 글을 가볍게 글자 인식한 값이라, 서버 판(원격 On 문서) 기본 읽기 0.971 을 이 꾸러미로 누구나 다시 낼 수 있습니다. 서버 판의 정밀 읽기 0.970 은 서버에만 있어 이 대본으로는 재현되지 않습니다.
+- 내 PC 판은 0.3.1 부터 가벼운 글자 인식을 포함합니다. 2026-11-28 같은 맥북 M5 Pro 에서 잰 서버 판 기본 읽기(손님·AI 도구 연결·열쇠 기본)는 종합 0.9714 · 읽는 순서 0.973 · 표 0.981 · 제목 0.959 · 문서당 0.119초였습니다. 서버 판 정밀 읽기(`precise: true`, 열쇠로 고름)는 0.9705 · 표 0.983 · 문서당 0.275초이며 이 꾸러미의 재현 대상은 아닙니다. 서버 판에서 글자 인식을 끄면(`ocr: false`) 0.9454 · 문서당 0.019초입니다. 글자 인식이 없던 내 PC 옛 판(0.3.0 까지)의 값은 위 0.3.1 기록에서 따로 적었습니다.
 - 바탕 읽기 규칙은 이 벤치 200개를 보며 다듬었습니다. 그 밖의 숫자는 대본을 공개하지 않은 자체 측정이고, 정의는 [측정 자료](https://github.com/on-munseo/on-munseo.github.io/blob/main/docs/benchmark.md)에 있습니다.
 
 **서버 판과 같은 결과.** 같은 커밋의 코드로 만들고, 같은 입력을 두 쪽에 보내 결과를 바이트까지 견줍니다(아래 [원격 On 문서와 같은 결과](#원격-on-문서와-같은-결과)).
@@ -276,7 +282,9 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 ## 원격 On 문서와 같은 결과
 
-같은 커밋의 원격 서버 꾸러미(운영과 같은 설정)와 이 꾸러미에 같은 문서를 보내 도구 결과를 견줬습니다. 숫자는 2026-11-26 에 만든 시험 판들(같은 날 여러 판 — 판마다 같은 커밋의 서버 꾸러미와 짝지어)로 잰 것입니다.
+**0.3.2 게시 전 후보(2026-11-28)** 를 네트워크 막고 서버 판과 견줬습니다. 공개 문서 153개 2,091번이 모두 같았고, 가린 한글 29개는 바이트까지 같았습니다.
+
+아래는 앞서 잰 기록입니다. 같은 커밋의 원격 서버 꾸러미(운영과 같은 설정)와 이 꾸러미에 같은 문서를 보내 도구 결과를 견줬습니다. 숫자는 2026-11-26 에 만든 시험 판들(같은 날 여러 판 — 판마다 같은 커밋의 서버 꾸러미와 짝지어)로 잰 것입니다.
 
 | 견준 것 | 문서 | 도구 부르기 | 같음 |
 |---|---|---|---|
@@ -359,17 +367,22 @@ AI 가 어느 도구를 부를지는 AI 가 정합니다. 위는 흔히 불리�
 
 ## 측정과 비교(참고)
 
-- 영어 PDF 벤치(opendataloader-bench)의 공식 순위표: 순위표에 오른 값 가운데 가장 높은 것은 0.907 입니다. 순위표 값은 순위표가 밝힌 값이고, 이 판(0.3.1)과 서버 판 기본 읽기의 0.971 은 같은 공식 채점기로 우리가 잰 값입니다. On 문서는 이 순위표에 올라가 있지 않습니다 — 순위표 저장소에 외부 엔진 결과를 더하는 요청 7건(2026-06~11)이 아직 병합되지 않았고, 순위표는 2026-04-30 뒤로 바뀌지 않았습니다. 그래서 등재 대신 재현 대본([믿을 근거](#믿을-근거--남이-다시-확인할-수-있는-것))을 둡니다.
+- 영어 PDF 벤치(opendataloader-bench)의 공식 순위표: 순위표에 오른 값 가운데 가장 높은 것은 0.907 입니다. 순위표 값은 순위표가 밝힌 값이고, 0.3.2 게시 전 묶음의 0.9713 과 서버 판 기본 읽기의 0.9714 는 같은 공식 채점기로 우리가 직접 잰 값입니다(2026-11-28, 맥북 M5 Pro). On 문서는 이 순위표에 올라가 있지 않습니다 — 순위표 저장소에 외부 엔진 결과를 더하는 요청 7건(2026-06~11)이 아직 병합되지 않았고, 순위표는 2026-04-30 뒤로 바뀌지 않았습니다. 그래서 등재 대신 재현 대본([믿을 근거](#믿을-근거--남이-다시-확인할-수-있는-것))을 둡니다.
 
 ## English summary
 
 **On Munseo — Local** (`on-munseo-local`) is an MCP server that runs entirely on your computer. It reads Hangul (HWP/HWPX/HML), PDF, Word, Excel and PowerPoint files, writes Korean government-style HWPX documents (reports, plans, result reports, press releases), fills 66 example templates and HWP forms, converts documents to HWPX, renders HWP/HWPX pages to PNG with the same pagination as Hangul (`on_render_pages`, `on_pages`, `preview` of `on_write_gov` — to check a drafted document visually), checks official-document style and masks personal information — rule-based, without any language model.
 
-- **Your documents stay on your machine.** It talks to your AI app over stdio only and uses no network: no update checks, no telemetry. Our code imports no network modules (checked at build time, see `netScan` in `MANIFEST.json`). On Node 25+, it relaunches itself under the Node permission model with network, child processes and native add-ons denied, file reads limited to your home folder by default (widen with `ONDOC_LOCAL_READ` or `setup --read <folder>`, `*` for everywhere) and writes to new `.hwpx` files there and in the output folder. Ask your AI to call `on_local_info` to verify (`blocked_by_node: true`, `network_modules_loaded: []`).
-- **Same results as the remote server.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
+- **Your documents stay on your machine.** It talks to your AI app over stdio only and uses no network: no update checks, no telemetry. Our code imports no network modules (checked at build time, see `netScan` in `MANIFEST.json`). On Node 25+, it relaunches itself under the Node permission model with network, child processes and native add-ons denied, file reads limited to your home folder by default (widen with `ONDOC_LOCAL_READ` or `setup --read <folder>`, `*` for everywhere) and saves new output files there and in the output folder. Ask your AI to call `on_local_info` to verify (`blocked_by_node: true`, `network_modules_loaded: []`).
+- **0.3.2 pre-publication bundle (2026-11-28):** npm still has 0.3.1 as its latest release. This bundle uses On Hangul Engine 2.2.4 (2.2.3 plus five pagination fixes), wasm build `3deec6931051`. With networking blocked, all 2,091 calls over 153 public documents matched the server; 29 masked Hangul files matched byte for byte.
+- **Same results as the remote server — earlier measurements.** Built from the same commit as the remote On Munseo MCP (`https://onmunseo.kr/mcp`). On 2026-11-26, 153 public documents gave identical results in all 2,091 tool calls; the document-writing tools (government-style reports, 66 templates, tables, forms, HWPX conversion, rewriting) matched in all 628 calls; a larger run over 2,026 public documents matched in all 27,644 calls; 6 calls against the live server matched byte for byte; macOS and Windows 11 builds matched in all 1,013 calls (masked HWPX files: same contents, zip bytes may differ by platform).
 - **Install:** register it with your AI tool — `npm install -g` alone does not connect it. Claude Code: `claude mcp add -s user on-local -- npx -y on-munseo-local@0.3.1`. Codex: `codex mcp add on-local -- npx -y on-munseo-local@0.3.1`. Claude Desktop / Cursor: `"command": "npx", "args": ["-y", "on-munseo-local@0.3.1"]`. Or run `npx -y on-munseo-local@0.3.1 setup` to find the AI tools installed on this computer and add it to each (backs up each config first, skips existing entries, `--dry-run`, `--undo`; no network). For Korean statute texts and citation checks, also add the remote law bundle `https://onmunseo.kr/mcp/law` (`setup --pair`) — only your questions, not your documents, are sent to it.
 - **Pinned version:** registration lines pin the version (`on-munseo-local@0.3.1`); nothing updates by itself. To update: `npx -y on-munseo-local@latest setup --update` (changes only the version in registered entries, backs up first, `--dry-run`). Changes: [CHANGELOG](CHANGELOG.md).
-- **Re-runnable numbers:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.971 (0.9707) with this npm package alone, version 0.3.1 with light OCR of text in images — the same as the remote server's default read to four decimals ([script](repro/opendataloader-bench); 0.945 without OCR up to 0.3.0); form filling on 709 public statute forms: 638 of the 655 filled files change nothing but the filled text and the placeholder text the tool announced it would replace — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
+- **0.3.2 bundle benchmark:** 200 English PDFs in opendataloader-bench, official scorer unchanged, MacBook M5 Pro, 2026-11-28: overall **0.9713** (0.9713178891529214), reading order 0.9727, tables 0.9807, headings 0.9593; test 125: 0.9706, development 75: 0.9725; zero errors, 0.316 seconds per document including stdio and excluding server startup. Use `--pkg file:<bundle>`; results and bundle fingerprints are in [the reproduction folder](repro/opendataloader-bench), with separate `expected_0.3.2/` files. The published npm defaults and `expected/` remain at 0.3.1. On the same day and machine, the server default scored 0.97136; 190 of 200 predictions matched byte for byte.
+- **Server measurements on the same day and machine:** default light OCR (guest, AI connections and API-key default) scored 0.9714 overall, 0.973 reading order, 0.981 tables and 0.959 headings, at 0.119 seconds per document. Key-selected precise reading (`precise: true`) scored 0.9705 overall and 0.983 tables, at 0.275 seconds per document; it is not available in this local reproduction. With OCR off (`ocr: false`), the server scored 0.9454 at 0.019 seconds per document.
+- **0.3.2 PDF fixes:** footnote order below the left column, overlapping math characters (`𝜇𝜇` → `𝜇`), bottom-to-top chart axis labels, and thin polygon table borders made of dots. Outputs for 1,727 Korean PDF pairs were unchanged (zero differing documents). `on_read` also offers `table_layout: "pretty"` to put each HTML table tag on a new line, preserving text and cells. The server scored 0.9749 with this option because the reference tables use that formatting and the reading-order score rises; it is not the default.
+- **0.3.2 form output:** `on_fill`, including `replace` and `cells`, returns both HWPX and .hwp for an original .hwp form (`as` defaults to `both`; `as: "hwpx"` returns only HWPX). It replaces changed paragraphs and preserves all other records, including document information and images, byte for byte. When the body changes, preview text is updated and the preview image is blank. An .hwp is returned only if reading it back matches the filled text; otherwise only HWPX is returned with a reason (for example, distribution-only, encrypted or large files). All 48 fillable forms among 80 public statute forms produced .hwp files with matching text on rereading. Original .hwpx forms and other tools such as `on_write` and `on_to_hwpx` still return only HWPX.
+- **Published 0.3.1 measurements:** opendataloader-bench (200 English PDFs, official scorer unchanged) overall 0.971 (0.9707) with this npm package alone, version 0.3.1 with light OCR of text in images — the same as the server default measured on 2026-11-26 to four decimals ([script](repro/opendataloader-bench); 0.945 without OCR up to 0.3.0); form filling on 709 public statute forms: 638 of the 655 filled files change nothing but the filled text and the placeholder text the tool announced it would replace — [script](repro/form-fill). Security reports: [SECURITY.md](SECURITY.md).
 - **What goes to your AI:** text returned by a tool enters your AI conversation (and the AI provider, if it is a cloud service). To keep originals out of the chat, use `on_mask_hwpx` (writes the masked file only), `on_find_pii` (kinds and counts) or `mask: true`.
 - **Page images** are drawn without native modules — the same drawing code as the remote server, with Skia (CanvasKit, WebAssembly) and the bundled OnPok fonts; across 238 pages compared with the remote server's renderer the mean pixel difference was at most 0.6/255 and no glyph was missing.
 - **Included in 0.3.1:** PDF output (`on_pdf`), chart images (`on_chart`), diagram images (`on_diagram`) and light OCR of text in images. Light OCR reads non-Korean page images in PDFs (up to four regions per document, largest first) and scanned documents of up to two pages. Other scanned pages and standalone image files are not read; see [limitations](#한계알아-둘-점).

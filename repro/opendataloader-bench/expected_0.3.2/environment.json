@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-28",
+  "package": {
+    "name": "on-munseo-local",
+    "version": "0.3.2",
+    "status": "npm 게시 전 묶음",
+    "tarball": "on-munseo-local-0.3.2.tgz",
+    "tarball_sha256": "28af215f5e67f5568d444b035927bc0c338593cc486e79d4bf5974c8d5adf8b0",
+    "tarball_size_mb": 53.2,
+    "offline_tarball": "on-munseo-local-0.3.2-offline.tgz",
+    "offline_tarball_sha256": "4c8c94916afdbf1e6f856783cfc6a2569a05761f1929de0afa46c2cbc1798553",
+    "offline_tarball_size_mb": 57.1,
+    "on_local_info": {
+      "commit": "56ca4f36b0084c42db6ae43354c9b4eadae85777",
+      "engine": "On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051"
+    }
+  },
+  "benchmark": {
+    "repository": "https://github.com/opendataloader-project/opendataloader-bench",
+    "commit": "7af1d8f4d0c09f51ea1a5c6ba5f66e993286d109",
+    "license": "Apache-2.0",
+    "scorer": "src/evaluator.py (고치지 않음)",
+    "documents": 200
+  },
+  "runs": [
+    {
+      "where": "묶음 파일을 --pkg file:<묶음> 으로 지정, 공식 채점기 src/evaluator.py(고치지 않음)",
+      "machine": "Apple M5 Pro",
+      "node": "v25.9.0",
+      "platform": "darwin 25.6.0 arm64",
+      "network_blocked_by_node": true
+    }
+  ],
+  "predictions_sha256sums_sha256": "48049aff19b5a850dbfaf3f0171c8731ddf8271c03b99461d3b41c53d8fdaa75",
+  "result": "전체 200개, 오류 0, 공식 채점 overall_mean 0.9713178891529214, 문서당 0.316초(표준 입출력 주고받기 포함, 서버 띄우기 뺌)"
+}

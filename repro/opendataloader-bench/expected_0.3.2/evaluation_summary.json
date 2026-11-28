@@ -1,0 +1,65 @@
+{
+  "what": "opendataloader-bench(커밋 7af1d8f4d0c09f51ea1a5c6ba5f66e993286d109) 공식 채점기 src/evaluator.py 가 만든 evaluation.json 의 summary·metrics(묶음의 기계 안 경로는 파일 이름으로 줄이고 문서별 칸은 뺌) + 문서별 점수로 나눠 셈한 split",
+  "summary": {
+    "engine_name": "on-munseo-local",
+    "engine_version": "0.3.2",
+    "processor": "Apple M5 Pro",
+    "document_count": 200,
+    "total_elapsed": 63.24,
+    "elapsed_per_doc": 0.316,
+    "date": "2026-11-28",
+    "package": "file:on-munseo-local-0.3.2.tgz",
+    "package_commit": "56ca4f36b0084c42db6ae43354c9b4eadae85777",
+    "engine": "On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051",
+    "network_blocked_by_node": true,
+    "node": "v25.9.0",
+    "platform": "darwin 25.6.0 arm64",
+    "server": {
+      "name": "on-local",
+      "title": "On 문서 — 내 PC",
+      "version": "1.0"
+    },
+    "tool": "on_read { file_path, mask: false }",
+    "failed": 0,
+    "note": "시간은 문서마다 tools/call 을 보내고 답을 받기까지(표준 입출력 주고받기 포함, 서버 띄우기 뺌)"
+  },
+  "metrics": {
+    "score": {
+      "overall_mean": 0.9713178891529214,
+      "nid_mean": 0.9726653007162834,
+      "nid_s_mean": 0.9773540241261928,
+      "teds_mean": 0.9807456711242113,
+      "teds_s_mean": 0.9901826043248302,
+      "mhs_mean": 0.9593411222830664,
+      "mhs_s_mean": 0.9807586586036283
+    },
+    "nid_count": 200,
+    "teds_count": 42,
+    "mhs_count": 107,
+    "missing_predictions": 0
+  },
+  "split": {
+    "dev_75": {
+      "documents": 75,
+      "overall": 0.972516,
+      "nid": 0.979762,
+      "teds": 0.967396,
+      "mhs": 0.952442
+    },
+    "test_125": {
+      "documents": 125,
+      "overall": 0.970599,
+      "nid": 0.968407,
+      "teds": 0.98673,
+      "mhs": 0.963977
+    },
+    "all_200": {
+      "documents": 200,
+      "overall": 0.971318,
+      "nid": 0.972665,
+      "teds": 0.980746,
+      "mhs": 0.959341
+    }
+  },
+  "split_rule": "문서 id 의 sha1 을 16진 정수로 읽어 5 로 나눈 나머지가 1·2 면 dev_75, 나머지는 test_125. 지표에 해당 없는 문서(빈 칸)는 그 평균에서 뺌(공식 채점기의 평균과 같은 방식)"
+}
