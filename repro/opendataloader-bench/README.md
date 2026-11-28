@@ -16,8 +16,8 @@
 - 왼쪽 단 아래 각주 차례, 수학 글자 겹침(`𝜇𝜇` → `𝜇`), 아래에서 위로 쓴 그래프 세로축 이름, 점으로 칠한 얇은 다각형 표 테두리를 고쳤습니다. 한국어 PDF 짝 1,727개의 출력은 그대로였습니다(다른 문서 0).
 - 같은 날 같은 기계의 서버 판 기본 종합 0.97136 과 예측 200개 중 190개가 바이트까지 같았습니다.
 - 기댓값은 [`expected_0.3.2/`](expected_0.3.2)에 있습니다: `SHA256SUMS.predictions`(200개 예측 지문), `evaluation_summary.json`(문서별 칸을 뺀 채점 요약·지표·나눔), `environment.json`(판·커밋·지문·날짜). 예측 지문 파일 자체의 SHA-256 은 `48049aff19b5a850dbfaf3f0171c8731ddf8271c03b99461d3b41c53d8fdaa75` 입니다.
-- 묶음 `on-munseo-local-0.3.2.tgz`(53.2MB) SHA-256: `528803559ea1ad1123fd7d9677b18948c9bf6e2a97ad741be258b59ee66faa04`. 폐쇄망 `on-munseo-local-0.3.2-offline.tgz`(57.1MB) SHA-256: `bbafd58bdbbf7478979f4cde5a67bd7b810f2c300f0488495faffeeaaf183b45`.
-- 꾸러미 커밋은 `30e68a55339a0c033909ff35f1be867c92920aa4`, 엔진은 **On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051** 입니다.
+- 묶음 `on-munseo-local-0.3.2.tgz`(53.2MB) SHA-256: `544204ddb98ccb6f96f24a838db0ccf32e6960b539dbe82c148fafa9b4bda9d8`. 폐쇄망 `on-munseo-local-0.3.2-offline.tgz`(57.1MB) SHA-256: `916bdccfb9003dd92262f763876a98319b28e1f47407b7b812c2f484826bc1d1`.
+- 꾸러미 커밋은 `bb888186a3d3a343630aaeeb53d7fbe9ac3ee09e`, 엔진은 **On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051** 입니다.
 
 **0.3.2 를 npm 에 올리면 `expected_0.3.2/` 가 `expected/` 가 됩니다.**
 

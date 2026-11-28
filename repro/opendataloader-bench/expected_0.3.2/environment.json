@@ -5,13 +5,13 @@
     "version": "0.3.2",
     "status": "npm 게시 전 묶음",
     "tarball": "on-munseo-local-0.3.2.tgz",
-    "tarball_sha256": "528803559ea1ad1123fd7d9677b18948c9bf6e2a97ad741be258b59ee66faa04",
+    "tarball_sha256": "544204ddb98ccb6f96f24a838db0ccf32e6960b539dbe82c148fafa9b4bda9d8",
     "tarball_size_mb": 53.2,
     "offline_tarball": "on-munseo-local-0.3.2-offline.tgz",
-    "offline_tarball_sha256": "bbafd58bdbbf7478979f4cde5a67bd7b810f2c300f0488495faffeeaaf183b45",
+    "offline_tarball_sha256": "916bdccfb9003dd92262f763876a98319b28e1f47407b7b812c2f484826bc1d1",
     "offline_tarball_size_mb": 57.1,
     "on_local_info": {
-      "commit": "30e68a55339a0c033909ff35f1be867c92920aa4",
+      "commit": "bb888186a3d3a343630aaeeb53d7fbe9ac3ee09e",
       "engine": "On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051"
     }
   },

@@ -9,7 +9,7 @@
     "elapsed_per_doc": 0.316,
     "date": "2026-11-28",
     "package": "file:on-munseo-local-0.3.2.tgz",
-    "package_commit": "30e68a55339a0c033909ff35f1be867c92920aa4",
+    "package_commit": "bb888186a3d3a343630aaeeb53d7fbe9ac3ee09e",
     "engine": "On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051",
     "network_blocked_by_node": true,
     "node": "v25.9.0",
