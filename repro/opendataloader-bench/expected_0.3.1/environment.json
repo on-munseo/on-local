@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-28",
+  "package": {
+    "name": "on-munseo-local",
+    "version": "0.3.1",
+    "tarball_sha256": "ffcc94e1d3f20517f6f136c595b94a9100998eba511f4e03978cf45e4a2a0be7",
+    "npm_integrity": "sha512-xxXG3RgcFJtNI5NlZ7uh+qciJl0YYWwHt/RtOZW81fYMnNYXOd0DxoQiIQss0r53uSvfJiuJi67UWsuN4hVJ0g==",
+    "npm_shasum": "638782bdabe537c413f3a97babf274217be25b72",
+    "on_local_info": {
+      "commit": "6ed32cae1f9a6e3d51662e2e980bb88fe3bdd1aa",
+      "engine": "On 한글엔진 2.2.3 · 표식 판 wasm d7f9fdd85384"
+    }
+  },
+  "benchmark": {
+    "repository": "https://github.com/opendataloader-project/opendataloader-bench",
+    "commit": "7af1d8f4d0c09f51ea1a5c6ba5f66e993286d109",
+    "license": "Apache-2.0",
+    "scorer": "src/evaluator.py (고치지 않음)",
+    "documents": 200
+  },
+  "runs": [
+    {
+      "where": "새로 clone 한 벤치(커밋 7af1d8f) + uv sync(uv 0.13.10) + uv run src/evaluator.py(expected/evaluation_summary.json 은 이 회차)",
+      "machine": "Apple M5 Pro · 64GB · macOS 26.6.2",
+      "node": "v25.9.0",
+      "python": "3.13.14",
+      "network_blocked_by_node": true
+    },
+    {
+      "where": "같은 사본, 두 번째",
+      "node": "v25.9.0",
+      "network_blocked_by_node": true
+    }
+  ],
+  "result": "두 번 모두 예측 마크다운 200개의 SHA-256 이 같음(SHA256SUMS.predictions 의 SHA-256 a160aa09ea94374fb5378177a28e8dff69c361b44f51cba7c9d305dd4fdb82f5), 오류 0, 공식 채점 overall_mean 0.9706994030287757",
+  "earlier": "0.2.0·0.2.1·0.3.0(글자 인식 없음)은 예측 200개가 서로 바이트까지 같았고 공식 채점 overall_mean 0.9452669778168985(SHA256SUMS.predictions 의 SHA-256 3ce7995d377e465534f8837c655eef6c1bf53e948c24b4b822533ebb270564b7, 2026-11-27 다섯 번)"
+}

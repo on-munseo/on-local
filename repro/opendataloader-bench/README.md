@@ -2,9 +2,9 @@
 
 공개 PDF 벤치마크 [opendataloader-bench](https://github.com/opendataloader-project/opendataloader-bench)(Apache-2.0)의 PDF 200개를 **On 문서 내 PC 판(npm `on-munseo-local@0.3.2`)** 으로 읽고, 그 벤치 저장소의 **공식 채점기(`src/evaluator.py`, 고치지 않음)** 로 채점하는 순서입니다. 비공개 코드는 쓰지 않습니다. 필요한 것은 공개된 npm 꾸러미, 벤치 저장소, 이 폴더의 대본 `run.mjs`(다른 꾸러미 없이 Node 만으로 돎)뿐이라 누구나 같은 숫자를 다시 낼 수 있습니다.
 
-## 0.3.2 npm 게시 전 묶음으로 돌린 값(2026-11-28)
+## 우리가 돌린 값(2026-11-28, 게시된 `on-munseo-local@0.3.2`)
 
-같은 공식 채점기(고치지 않음)와 맥북 M5 Pro 에서, `--pkg file:<묶음>` 으로 `on-munseo-local-0.3.2.tgz` 를 지정해 쟀습니다. npm 기준 `expected/` 와 대본의 `--pkg` 기본값은 **0.3.1 그대로**입니다.
+같은 공식 채점기(고치지 않음)와 맥북 M5 Pro 에서, `--pkg file:<묶음>` 으로 `on-munseo-local-0.3.2.tgz` 를 지정해 쟀습니다. npm 에 게시된 0.3.2 꾸러미는 측정에 쓴 묶음과 SHA-256 이 같습니다. `expected/` 와 대본의 `--pkg` 기본값은 **0.3.2**입니다.
 
 | 문서 | 종합 | 읽는 순서(NID) | 표(TEDS) | 제목(MHS) |
 |---|---|---|---|---|
@@ -15,15 +15,15 @@
 - 종합 원값은 **0.9713178891529214**, 오류 0, 문서당 **0.316초**입니다(표준 입출력 주고받기 포함, 서버 띄우는 시간 뺌). 시험용·개발용은 아래와 같은 나눔 규칙으로 문서별 점수를 평균했습니다.
 - 왼쪽 단 아래 각주 차례, 수학 글자 겹침(`𝜇𝜇` → `𝜇`), 아래에서 위로 쓴 그래프 세로축 이름, 점으로 칠한 얇은 다각형 표 테두리를 고쳤습니다. 한국어 PDF 짝 1,727개의 출력은 그대로였습니다(다른 문서 0).
 - 같은 날 같은 기계의 서버 판 기본 종합 0.97136 과 예측 200개 중 190개가 바이트까지 같았습니다.
-- 기댓값은 [`expected_0.3.2/`](expected_0.3.2)에 있습니다: `SHA256SUMS.predictions`(200개 예측 지문), `evaluation_summary.json`(문서별 칸을 뺀 채점 요약·지표·나눔), `environment.json`(판·커밋·지문·날짜). 예측 지문 파일 자체의 SHA-256 은 `48049aff19b5a850dbfaf3f0171c8731ddf8271c03b99461d3b41c53d8fdaa75` 입니다.
-- 묶음 `on-munseo-local-0.3.2.tgz`(53.2MB) SHA-256: `544204ddb98ccb6f96f24a838db0ccf32e6960b539dbe82c148fafa9b4bda9d8`. 폐쇄망 `on-munseo-local-0.3.2-offline.tgz`(57.1MB) SHA-256: `916bdccfb9003dd92262f763876a98319b28e1f47407b7b812c2f484826bc1d1`.
+- 기댓값은 [`expected/`](expected)에 있습니다: `SHA256SUMS.predictions`(200개 예측 지문), `evaluation_summary.json`(문서별 칸을 뺀 채점 요약·지표·나눔), `environment.json`(판·커밋·지문·날짜). 예측 지문 파일 자체의 SHA-256 은 `48049aff19b5a850dbfaf3f0171c8731ddf8271c03b99461d3b41c53d8fdaa75` 입니다.
+- 게시된 npm 꾸러미 `on-munseo-local-0.3.2.tgz`(53.2MB) SHA-256: `544204ddb98ccb6f96f24a838db0ccf32e6960b539dbe82c148fafa9b4bda9d8`(측정에 쓴 묶음과 같음). 폐쇄망 `on-munseo-local-0.3.2-offline.tgz`(57.1MB) SHA-256: `916bdccfb9003dd92262f763876a98319b28e1f47407b7b812c2f484826bc1d1`.
 - 꾸러미 커밋은 `bb888186a3d3a343630aaeeb53d7fbe9ac3ee09e`, 엔진은 **On 한글엔진 2.2.4 · 표식 판 wasm 3deec6931051** 입니다.
 
-**0.3.2 를 npm 에 올리면 `expected_0.3.2/` 가 `expected/` 가 됩니다.**
+앞 판 0.3.1 의 기댓값은 [`expected_0.3.1/`](expected_0.3.1)에 보관했습니다.
 
-이 묶음을 받았다면 `node <이 폴더>/run.mjs . --pkg file:<묶음의 전체 경로>` 로 읽고 아래와 같이 공식 채점기를 돌립니다. 대본은 아직 0.3.1 의 `expected/` 와 견주므로 차이를 알릴 수 있습니다. 묶음 결과는 `expected_0.3.2/evaluation_summary.json` 과 견주고, 지문은 `cd prediction/on-munseo-local && shasum -a 256 -c <이 폴더>/expected_0.3.2/SHA256SUMS.predictions` 로 확인합니다.
+`node <이 폴더>/run.mjs .` 로 게시된 0.3.2 를 받아 읽고 아래와 같이 공식 채점기를 돌립니다. 묶음 파일을 받아 두었다면 `--pkg file:<묶음의 전체 경로>` 로 지정할 수도 있습니다. 결과는 `expected/evaluation_summary.json` 과 견주고, 지문은 `cd prediction/on-munseo-local && shasum -a 256 -c <이 폴더>/expected/SHA256SUMS.predictions` 로 확인합니다.
 
-## 우리가 돌린 값(2026-11-28, `on-munseo-local@0.3.2`)
+## 앞 판 — 0.3.1 로 잰 값(2026-11-28)
 
 | 문서 | 종합 | 읽는 순서(NID) | 표(TEDS) | 제목(MHS) |
 |---|---|---|---|---|
@@ -31,16 +31,16 @@
 | 시험용 125 | 0.9700 | 0.9678 | 0.9867 | 0.9639 |
 | 개발용 75 | 0.9719 | 0.9792 | 0.9647 | 0.9520 |
 
-- 공식 채점기가 낸 값 그대로입니다(`expected/evaluation_summary.json`). 시험용·개발용은 공식 채점기의 문서별 값(`evaluation.csv`)을 문서 id 로 나눠 우리가 평균한 것입니다(나누는 법은 아래 「한계」).
+- 공식 채점기가 낸 값 그대로입니다(`expected_0.3.1/evaluation_summary.json`). 시험용·개발용은 공식 채점기의 문서별 값(`evaluation.csv`)을 문서 id 로 나눠 우리가 평균한 것입니다(나누는 법은 아래 「한계」).
 - **0.3.1 부터 내 PC 판도 그림 속 글을 가볍게 글자 인식해 제자리에 넣습니다.** 서버 판(onmunseo.kr) 기본 읽기 값(2026-11-26 — 종합 0.9707 · 읽는 순서 0.9721 · 표 0.9799 · 제목 0.9591 · 개발용 0.9719 · 시험용 0.9700)과 네 자리까지 같습니다.
 - 같은 꾸러미로 두 번 돌렸습니다(새로 clone 한 벤치에서 `uv sync` 뒤, Node 25.9). 두 번 모두 예측 마크다운 200개의 SHA-256 이 같았고(`SHA256SUMS.predictions` 의 SHA-256 `a160aa09…dfdb82f5`), 오류는 0이었습니다. 채점은 새 clone 의 `uv run src/evaluator.py` 입니다.
-- 꾸러미 지문: `on-munseo-local-0.3.1.tgz` SHA-256 `ffcc94e1d3f20517f6f136c595b94a9100998eba511f4e03978cf45e4a2a0be7`, npm `dist.integrity` `sha512-xxXG3RgcFJtNI5NlZ7uh+qciJl0YYWwHt/RtOZW81fYMnNYXOd0DxoQiIQss0r53uSvfJiuJi67UWsuN4hVJ0g==`. 돌린 환경은 `expected/environment.json` 에 있습니다.
+- 꾸러미 지문: `on-munseo-local-0.3.1.tgz` SHA-256 `ffcc94e1d3f20517f6f136c595b94a9100998eba511f4e03978cf45e4a2a0be7`, npm `dist.integrity` `sha512-xxXG3RgcFJtNI5NlZ7uh+qciJl0YYWwHt/RtOZW81fYMnNYXOd0DxoQiIQss0r53uSvfJiuJi67UWsuN4hVJ0g==`. 돌린 환경은 `expected_0.3.1/environment.json` 에 있습니다.
 - 문서당 시간은 0.44~0.47초였습니다(맥북 M5 Pro, 표준 입출력 주고받기 포함, 서버 띄우는 시간 뺌 — 글자 인식 시간 포함). 다른 컴퓨터에서 잰 시간과는 견주지 마세요.
 
 ### 앞 판(글자 인식 없음)
 
 - 0.2.0·0.2.1·0.3.0 은 글자 인식 없이 읽어 종합 **0.9453**(읽는 순서 0.9489 · 표 0.9375 · 제목 0.9376 · 시험용 125 0.9501 · 개발용 75 0.9372)이었습니다. 세 판의 예측 200개는 바이트까지 같았습니다(SHA-256 `3ce7995d…70564b7`, 2026-11-27 다섯 번).
-- 앞 판 값을 다시 내려면 `node run.mjs . --pkg on-munseo-local@0.2.1` 로 돌립니다. 이때 대본은 `expected/`(0.3.1 지문)와 49개가 다르다고 알립니다. 채점 값 0.9452669778168985 와 견주세요.
+- 앞 판 값을 다시 내려면 `node run.mjs . --pkg on-munseo-local@0.2.1` 로 돌립니다. 0.3.1 지문(`expected_0.3.1/`)과는 49개가 달랐습니다. 현재 대본은 `expected/`(0.3.2 지문)와 견줍니다. 채점 값 0.9452669778168985 와 견주세요.
 
 ## 다시 재는 순서
 
@@ -56,9 +56,9 @@ uv run src/evaluator.py --engine on-munseo-local
 ```
 
 - `run.mjs` 는 `prediction/on-munseo-local/` 에 마크다운 200개, `summary.json`, `SHA256SUMS.predictions` 를 씁니다. 끝에 이 폴더 `expected/` 의 지문과 맞대 「200개 모두 같음」인지, 다르면 어느 문서인지 알려 줍니다.
-- 채점이 끝나면 `prediction/on-munseo-local/evaluation.json` 의 `metrics.score.overall_mean` 을 `expected/evaluation_summary.json` 의 값(0.9706994030287757)과 견줍니다.
+- 채점이 끝나면 `prediction/on-munseo-local/evaluation.json` 의 `metrics.score.overall_mean` 을 `expected/evaluation_summary.json` 의 값(0.9713178891529214)과 견줍니다.
 - 손으로 지문을 맞대려면 `cd prediction/on-munseo-local && shasum -a 256 -c <이 폴더>/expected/SHA256SUMS.predictions` 를 씁니다(리눅스는 `sha256sum -c`).
-- 꾸러미 지문은 `npm pack on-munseo-local@0.3.2` 뒤 `shasum -a 256 on-munseo-local-0.3.1.tgz` 로 맞대 봅니다.
+- 꾸러미 지문은 `npm pack on-munseo-local@0.3.2` 뒤 `shasum -a 256 on-munseo-local-0.3.2.tgz` 로 위의 SHA-256 과 맞대 봅니다.
 - 다른 판을 재려면 `--pkg on-munseo-local@<판>` 을 줍니다. 판이 다르면 결과가 달라질 수 있고, 대본이 `expected/` 와 다르다고 알립니다.
 
 ## 대본이 하는 일
@@ -72,8 +72,8 @@ uv run src/evaluator.py --engine on-munseo-local
 
 ## 이 값과 다른 숫자
 
-- **0.3.1 의 이 값은 그림 속 글을 가볍게 글자 인식한 값입니다.** 0.3.0 까지의 꾸러미에는 글자 인식이 없어 0.945 였습니다(위 「앞 판」).
-- **2026-11-28 서버 판 기본 읽기는 0.9714, 이 0.3.2 게시 전 묶음은 0.9713** 입니다(같은 날 같은 기계, 위의 0.3.1 기록과 구분). 서버 판 정밀 읽기(`precise: true`, 열쇠로 고름)는 0.9705 · 표 0.983 · 문서당 0.275초이고, 이 꾸러미로는 다시 낼 수 없습니다. 서버 판은 MCP 주소 `https://onmunseo.kr/mcp` 의 `on_read` 로 같은 200개를 다시 잴 수 있습니다. 다만 손님은 한 주소에서 하루 50번이라 나눠 재야 합니다.
+- **0.3.1 부터 그림 속 글을 가볍게 글자 인식한 값입니다.** 0.3.0 까지의 꾸러미에는 글자 인식이 없어 0.945 였습니다(위 「앞 판」).
+- **2026-11-28 서버 판 기본 읽기는 0.9714, 게시된 0.3.2 꾸러미는 0.9713** 입니다(같은 날 같은 기계, 위의 0.3.1 기록과 구분). 서버 판 정밀 읽기(`precise: true`, 열쇠로 고름)는 0.9705 · 표 0.983 · 문서당 0.275초이고, 이 꾸러미로는 다시 낼 수 없습니다. 서버 판은 MCP 주소 `https://onmunseo.kr/mcp` 의 `on_read` 로 같은 200개를 다시 잴 수 있습니다. 다만 손님은 한 주소에서 하루 50번이라 나눠 재야 합니다.
 - 서버 판에서 `on_read` 의 `table_layout: "pretty"` 를 고르면 종합 0.9749 입니다. 표 HTML 을 태그마다 줄 바꿔 쓰며 글·칸은 같습니다. 정답 표가 그 꼴로 적혀 있어 읽는 순서 값이 오르는 것이므로 기본이 아닙니다. 위 묶음 값은 이 선택 없이 잰 값입니다.
 - **공식 순위표**: 벤치 저장소 README 표의 최고 종합은 0.907 입니다(표 12줄, 예측 폴더 14개 — README 표 마지막 갱신 2026-04-30). 순위표 값은 순위표가 밝힌 값이고, 우리 값은 같은 커밋의 같은 공식 채점기로 우리가 돌린 값입니다. 같은 컴퓨터·같은 날 돌린 비교가 아니므로 시간은 견주지 마세요.
 
