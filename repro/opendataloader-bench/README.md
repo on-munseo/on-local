@@ -6,6 +6,8 @@
 
 같은 공식 채점기(고치지 않음)와 맥북 M5 Pro 에서, `--pkg file:<묶음>` 으로 `on-munseo-local-0.3.2.tgz` 를 지정해 쟀습니다. npm 에 게시된 0.3.2 꾸러미는 측정에 쓴 묶음과 SHA-256 이 같습니다. `expected/` 와 대본의 `--pkg` 기본값은 **0.3.2**입니다.
 
+게시된 0.3.3(2026-11-28)으로 다시 읽은 예측 마크다운 200개는 `expected/`(0.3.2) 지문과 200개 모두 같았습니다(오류 0, 맥북 M5 Pro 문서당 0.32초). 그래서 아래 점수는 0.3.3 에도 그대로입니다. 대본 기본값은 0.3.3 입니다.
+
 | 문서 | 종합 | 읽는 순서(NID) | 표(TEDS) | 제목(MHS) |
 |---|---|---|---|---|
 | 전체 200 | **0.9713** | 0.9727 | 0.9807 | 0.9593 |
@@ -58,7 +60,7 @@ uv run src/evaluator.py --engine on-munseo-local
 - `run.mjs` 는 `prediction/on-munseo-local/` 에 마크다운 200개, `summary.json`, `SHA256SUMS.predictions` 를 씁니다. 끝에 이 폴더 `expected/` 의 지문과 맞대 「200개 모두 같음」인지, 다르면 어느 문서인지 알려 줍니다.
 - 채점이 끝나면 `prediction/on-munseo-local/evaluation.json` 의 `metrics.score.overall_mean` 을 `expected/evaluation_summary.json` 의 값(0.9713178891529214)과 견줍니다.
 - 손으로 지문을 맞대려면 `cd prediction/on-munseo-local && shasum -a 256 -c <이 폴더>/expected/SHA256SUMS.predictions` 를 씁니다(리눅스는 `sha256sum -c`).
-- 꾸러미 지문은 `npm pack on-munseo-local@0.3.3` 뒤 `shasum -a 256 on-munseo-local-0.3.2.tgz` 로 위의 SHA-256 과 맞대 봅니다.
+- 꾸러미 지문은 `npm pack on-munseo-local@0.3.2` 뒤 `shasum -a 256 on-munseo-local-0.3.2.tgz` 로 위의 SHA-256 과 맞대 봅니다.
 - 다른 판을 재려면 `--pkg on-munseo-local@<판>` 을 줍니다. 판이 다르면 결과가 달라질 수 있고, 대본이 `expected/` 와 다르다고 알립니다.
 
 ## 대본이 하는 일
